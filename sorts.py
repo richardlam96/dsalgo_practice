@@ -72,6 +72,7 @@ def shell_sort(target):
 # This implementation does not use a class format, and this particularly
 # matters because it is best to have a global aux array. But this
 # implementation passes around the aux a lot, which may slow it.
+#
 
 def merge(target, aux, lo, mid, hi):
 
@@ -123,19 +124,26 @@ def bu_sort(target):
 # QUICK SORT ##################################################################
 # There are two kinds of quick sort, one that will assume no knowledge of data
 # and another that will assume that there are duplicate values in the data.
+# 
 # In general, the quick sort chooses an element in the array as a 'pivot' and
 # uses that to move the other elements either to the left, if it is less than
-# the pivot, or to the right, if it is greater than the pivot.
+# the pivot, or to the right, if it is greater than the pivot. This is shown
+# in the first partition and quick_sort implementations. In the second set
+# of implementations, the pivot uses the median of values at the first and
+# last indicies, and gets rid of the need to make another exchange of values
 #
 # The second type of quick sort, quick_sort_3way, partitions the array
 # into partitions of values equal to pivot, less than pivot, greater than
 # pivot, and equal to pivot, respectively. It then reorganizes the array
 # so all values equal to pivot are between those less than and greater than
-# and then recursively sorts the less than and greater than partititons
+# and then recursively sorts the less than and greater than partititons.
+# In other words, this implementation is entropy optimal.
 #
 # NOTE: These implementations have not been check with the book but they
-# are still pretty fast
+# are still pretty fast. As of now, quick_sort_med3 has about the same
+# performance in a random case as quick_sort_3way.
 #
+
 def partition(target, lo, hi):
     if lo == hi:
         return
@@ -143,7 +151,7 @@ def partition(target, lo, hi):
     if hi-lo+1 <= 15:
         insertion_sort(target[lo:hi+1])
         return
-
+    
     pivot = target[lo]
     i = lo
     j = hi
@@ -172,6 +180,39 @@ def quick_sort(target):
     random.shuffle(target)
     partition(target, 0, len(target)-1)
 
+
+def partition_med3(target, lo, hi):
+    if lo == hi:
+        return
+
+    if hi-lo+1 <= 15:
+        insertion_sort(target[lo:hi+1])
+        return
+    
+    pivot = (target[lo] + target[hi]) / 2 
+    i = lo
+    j = hi
+    while i < j:
+        while i < j and target[i] < pivot:
+            i += 1
+        while j > i and target[j] >= pivot:
+            j -= 1
+        if j > i:
+            break
+        elif j == i:    # already partitioned or finished
+            return
+        temp = target[i]
+        target[i] = target[j]
+        target[j] = temp
+
+
+    partition(target, 0, j)
+    partition(target, j + 1, hi)
+
+
+def quick_sort_med3(target):
+    random.shuffle(target)
+    partition(target, 0, len(target)-1)
 
 
 def partition_3way(target, lo, hi):

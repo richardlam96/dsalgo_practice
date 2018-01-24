@@ -4,7 +4,7 @@ from numpy import random, sum
 from functools import partial
 
 from comparable import Comparable
-from sorts import shell_sort, td_sort, bu_sort, quick_sort, quick_sort_3way
+from sorts import shell_sort, td_sort, bu_sort, quick_sort, quick_sort_med3, quick_sort_3way
 
 
 
@@ -19,7 +19,7 @@ def runtime(data, sorter):
 
 def main():
 
-    algos = [sorted, shell_sort, td_sort, bu_sort, quick_sort, quick_sort_3way]
+    algos = [sorted, shell_sort, td_sort, bu_sort, quick_sort, quick_sort_med3, quick_sort_3way]
 
 
     # smaller sample to check validity
