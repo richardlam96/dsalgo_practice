@@ -1,6 +1,18 @@
-
+# HEAP PQ ####################################################################
+# Heap PQ is a priority queue that follows the structure of a binary tree.
+# For any index i, there is a parent index at i // 2 and two children
+# indicies at i * 2. In other words, this queue uses heap sort.
+#
+# NOTE: wonder how swim and sink would work on their own to sort an array
+#
+# Any time that a value is added to or removed from the queue, Heap PQ
+# performs the corresponding swim or sink to 'reheapify' the tree, making
+# sure that the values are realigned to follow the standard mentioned
+# above. And since it is in a binary tree, both insert and rmMax functions
+# have O(logN).
+#
 class HeapPQ(object):
-    
+
     def __init__(self, N=10):
         self.pq = [None] * N
         self.qcapacity = N
@@ -14,10 +26,10 @@ class HeapPQ(object):
         self.pq = tempq
         self.qcapacity = new_size
 
-    
+
     def __swim(self):
         for i in reversed(range(self.qsize)):
-            if (i // 2) >= 0: 
+            if (i // 2) >= 0:
                 if self.pq[i] > self.pq[i // 2]:
                     temp = self.pq[i // 2]
                     self.pq[i // 2] = self.pq[i]
@@ -26,7 +38,7 @@ class HeapPQ(object):
 
     def __sink(self):
         for i in range(self.qsize):
-            if (2*i + 1) < self.qsize: 
+            if (2*i + 1) < self.qsize:
                 if self.pq[i] < self.pq[2*i]:
                     temp = self.pq[2*i]
                     self.pq[2*i] = self.pq[i]
@@ -35,7 +47,7 @@ class HeapPQ(object):
                     temp = self.pq[2*i + 1]
                     self.pq[2*i + 1] = self.pq[i]
                     self.pq[i] = temp
-        
+
 
 
     def insert(self, value):
@@ -52,10 +64,10 @@ class HeapPQ(object):
         heap_Max = self.pq[0]
         self.pq[0] = self.pq[self.qsize - 1]
         self.pq[self.qsize - 1] = None
-        self.qsize -= 1 
+        self.qsize -= 1
         self.__sink()
         return heap_Max
-   
-    
+
+
     def isEmpty(self):
         return True if self.qsize == 0 else False
