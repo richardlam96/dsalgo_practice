@@ -17,10 +17,8 @@ def main():
     target.show_pq()
 
     for i in range(20):
-        print(target.max_value())
+        print("remove:", target.max_value(), "at", target.max_index())
         target.del_max()
-        target.show_keys()
-        target.show_pq()
 
 
 if __name__ == '__main__':

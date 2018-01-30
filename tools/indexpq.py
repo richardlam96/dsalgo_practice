@@ -35,7 +35,7 @@ class IndexPQ(object):
                 if self.pq[self.qkeys[i]] < self.pq[self.qkeys[2*i]]:
                     temp = self.qkeys[i]
                     self.qkeys[i] = self.qkeys[2*i]
-                    self.qkeys[i // 2] = temp
+                    self.qkeys[2*i] = temp
                 if self.pq[self.qkeys[i]] < self.pq[self.qkeys[2*i + 1]]:
                     temp = self.qkeys[i]
                     self.qkeys[i] = self.qkeys[2*i + 1]
@@ -54,9 +54,7 @@ class IndexPQ(object):
         self.pq[key] = value
         self.qsize += 1
 
-        # self.show_sorted_pq()
         self.__swim()
-        # self.show_sorted_pq()
 
 
     def change(self, key, value):
@@ -78,11 +76,10 @@ class IndexPQ(object):
 
 
     def del_max(self):
-        self.pq[self.qkeys[0]] = None      # delete the value corres to first key
-        self.qkeys[0] = self.qkeys[-1]     # swap first key with last key
-        self.qkeys[-1] = None              # delete the last key
+        self.pq[self.qkeys[0]] = None                  # delete the value
+        self.qkeys[0] = self.qkeys[self.qsize - 1]     # swap keys
+        self.qkeys[-1] = None                          # delete the last key
         self.qsize -= 1
-
         self.__sink()
 
 
@@ -96,10 +93,10 @@ class IndexPQ(object):
 
     # FOR TESTING PURPOSES ONLY !
     def show_keys(self):
-        print(self.qkeys)
+        print("keys: ", self.qkeys)
 
     def show_pq(self):
-        print(self.pq)
+        print("pq  : ", self.pq)
 
     def show_sorted_pq(self):
         for i in range(self.qsize):
