@@ -16,6 +16,8 @@ class IndexPQ(object):
 
 
     def __swim(self):
+        # compare with values in pq, but only change order of keys in
+        # qkeys
         pass
 
 
