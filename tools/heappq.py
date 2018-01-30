@@ -71,3 +71,8 @@ class HeapPQ(object):
 
     def isEmpty(self):
         return True if self.qsize == 0 else False
+
+
+    # FOR TESTING
+    def show_pq(self):
+        print(self.pq)
