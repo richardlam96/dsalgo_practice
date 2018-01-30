@@ -9,16 +9,25 @@ def main():
     input_data = [i for i in range(20)]
     random.shuffle(input_data)
 
-    # insert 20
-    for i in range(20):
+    for i in range(10):
         target.insert(i, input_data[i])
 
     target.show_keys()
     target.show_pq()
 
-    for i in range(20):
+    for i in range(5):
         print("remove:", target.max_value(), "at", target.max_index())
         target.del_max()
+
+    for i in range(10, 15):
+        target.insert(i, input_data[i])
+
+    for i in range(10):
+        print("remove:", target.max_value(), "at", target.max_index())
+        target.del_max()
+
+    target.show_keys()
+    target.show_pq()
 
 
 if __name__ == '__main__':
