@@ -75,19 +75,18 @@ def shell_sort(target):
 #
 
 def merge(target, aux, lo, mid, hi):
-
+    # copy values to aux
     for i in range(lo, hi+1):
         aux[i] = target[i]
 
-    # indicies for accessing aux
-    i = 0
-    mid = mid - lo
-    j = mid + 1
+    # aux will use the same indicies
+    i = lo                              # beg of first subarray
+    j = mid + 1                        # beg of second subarray
     for k in range(lo, hi+1):
-        if i > mid:
+        if i > mid:                    # left is exhausted
             target[k] = aux[j]
             j += 1
-        elif j > (hi-lo):
+        elif j > hi:                   # right is exhausted
             target[k] = aux[i]
             i += 1
         elif aux[i] < aux[j]:
@@ -98,14 +97,14 @@ def merge(target, aux, lo, mid, hi):
             j += 1
 
 def td_sort(target):
-    aux = [None] * target.size
+    aux = [None] * len(target)
     td_aux_sort(target, aux, 0, len(target)-1)
 
 def td_aux_sort(target, aux, lo, hi):
-    if hi <= lo: return
+    if hi <= lo:
+        return
     if hi-lo+1 <= 15:
         insertion_sort(target[lo:hi+1])
-        return
     mid = lo + (hi-lo)//2
     td_aux_sort(target, aux, lo, mid)
     td_aux_sort(target, aux, mid+1, hi)
@@ -113,7 +112,7 @@ def td_aux_sort(target, aux, lo, hi):
 
 
 def bu_sort(target):
-    N = target.size
+    N = len(target)
     aux = [None] * N
     sizes = (2**i for i in range(0, N) if 2**i < N)
     for size in sizes:
@@ -124,7 +123,7 @@ def bu_sort(target):
 # QUICK SORT ##################################################################
 # There are two kinds of quick sort, one that will assume no knowledge of data
 # and another that will assume that there are duplicate values in the data.
-# 
+#
 # In general, the quick sort chooses an element in the array as a 'pivot' and
 # uses that to move the other elements either to the left, if it is less than
 # the pivot, or to the right, if it is greater than the pivot. This is shown
@@ -151,7 +150,7 @@ def partition(target, lo, hi):
     if hi-lo+1 <= 15:
         insertion_sort(target[lo:hi+1])
         return
-    
+
     pivot = target[lo]
     i = lo
     j = hi
@@ -188,8 +187,8 @@ def partition_med3(target, lo, hi):
     if hi-lo+1 <= 15:
         insertion_sort(target[lo:hi+1])
         return
-    
-    pivot = (target[lo] + target[hi]) / 2 
+
+    pivot = (target[lo] + target[hi]) / 2
     i = lo
     j = hi
     while i < j:
@@ -206,13 +205,13 @@ def partition_med3(target, lo, hi):
         target[j] = temp
 
 
-    partition(target, 0, j)
-    partition(target, j + 1, hi)
+    partition_med3(target, 0, j)
+    partition_med3(target, j + 1, hi)
 
 
 def quick_sort_med3(target):
     random.shuffle(target)
-    partition(target, 0, len(target)-1)
+    partition_med3(target, 0, len(target)-1)
 
 
 def partition_3way(target, lo, hi):
@@ -280,6 +279,38 @@ def partition_3way(target, lo, hi):
 
 def quick_sort_3way(target):
     random.shuffle(target)
-    partition(target, 0, len(target)-1)
+    partition_3way(target, 0, len(target)-1)
 
 
+# HEAPSORT ###################################################################
+# Heap sort uses the sink function from HeapPQ and IndexPQ to sort an array
+# in two phases: the heap construction and the sortdown
+#
+
+def swim(target):
+    for i in reversed(range(len(target))):
+        if (i // 2) >= 0:
+            if target[i] > target[i // 2]:
+                temp = target[i]
+                target[i] = target[i // 2]
+                target[i // 2] = temp
+
+
+def sink(target):
+    for i in range(len(target)):
+        if (2*i) < len(target) and target[i] < target[2*i]:
+            temp = target[i]
+            target[i] = target[2*i]
+            target[2*i] = temp
+        if (2*i + 1) < len(target) and target[i] < target[2*i + 1]:
+            temp = target[i]
+            target[i] = target[2*i + 1]
+            target[2*i + 1] = temp
+
+
+def swim_sink_sort(target):
+    swim(target)
+    sink(target)
+
+def heap_sort(target):
+    pass
