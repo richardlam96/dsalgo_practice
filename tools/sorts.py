@@ -19,7 +19,20 @@ def insertion_sort(target):
                 target[j] = target[j-1]
                 j -= 1
             else:
-                break;
+                break
+        target[j] = pivot
+
+
+def insertion_sort_by_index(target, lo, hi):
+    for i in range(lo, hi+1):
+        pivot = target[i]
+        j = i
+        while j - 1 >= 0:
+            if target[j-1] > pivot:
+                target[j] = target[j-1]
+                j -= 1
+            else:
+                break
         target[j] = pivot
 
 
@@ -144,11 +157,11 @@ def bu_sort(target):
 #
 
 def partition(target, lo, hi):
-    if lo == hi:
+    if hi-lo+1 <= 1:
         return
 
     if hi-lo+1 <= 15:
-        insertion_sort(target[lo:hi+1])
+        insertion_sort_by_index(target, lo, hi)
         return
 
     pivot = target[lo]
@@ -157,23 +170,17 @@ def partition(target, lo, hi):
     while i < j:
         while i < j and target[i] < pivot:
             i += 1
-        while j > i and target[j] >= pivot:
+        while i < j and target[j] > pivot:
             j -= 1
-        if j > i:
+        if i >= j:
             break
-        elif j == i:    # already partitioned or finished
-            return
+
         temp = target[i]
         target[i] = target[j]
         target[j] = temp
 
-
-    target[lo] = target[j]
-    target[j] = pivot
-
     partition(target, 0, j)
     partition(target, j + 1, hi)
-
 
 def quick_sort(target):
     random.shuffle(target)
@@ -185,7 +192,7 @@ def partition_med3(target, lo, hi):
         return
 
     if hi-lo+1 <= 15:
-        insertion_sort(target[lo:hi+1])
+        insertion_sort_by_index(target, lo, hi)
         return
 
     pivot = (target[lo] + target[hi]) / 2
@@ -194,12 +201,11 @@ def partition_med3(target, lo, hi):
     while i < j:
         while i < j and target[i] < pivot:
             i += 1
-        while j > i and target[j] >= pivot:
+        while j > i and target[j] > pivot:
             j -= 1
-        if j > i:
+        if i >= j:
             break
-        elif j == i:    # already partitioned or finished
-            return
+
         temp = target[i]
         target[i] = target[j]
         target[j] = temp
@@ -219,7 +225,7 @@ def partition_3way(target, lo, hi):
         return
 
     if hi-lo+1 <= 15:
-        insertion_sort(target[lo:hi+1])
+        insertion_sort_by_index(target, lo, hi)
         return
 
 
@@ -247,16 +253,14 @@ def partition_3way(target, lo, hi):
                 temp = target[q]
                 target[q] = target[j]
                 target[j] = temp
-                q += 1
+                q -= 1
             if target[j] > pivot:
-                j+= 1
+                j -= 1
             elif target[j] < pivot:
                 break;
 
-        if j < i:
+        if j <= i:
             break
-        elif j == i:
-            return
 
         temp = target[i]
         target[i] = target[j]
