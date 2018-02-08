@@ -29,6 +29,7 @@ def insertion_sort(target):
 
 
 def insertion_sort_by_index(target, lo, hi):
+    print("bang, inserstioned", lo, hi)
     for i in range(lo, hi+1):
         pivot = target[i]
         j = i
@@ -157,7 +158,7 @@ def bu_sort(target):
 # In other words, this implementation is entropy optimal.
 #
 # NOTE: These implementations have not been checked with the book but they
-# are still pretty fast. As of now, quick_sort_med3 has about the same
+# are still pretty fast. As of now, quick_sort_avg2 has about the same
 # performance in a random case as quick_sort_3way.
 #
 # NOTE: In the first implementation of the partition function, the values
@@ -167,9 +168,21 @@ def bu_sort(target):
 # will indefinitely switch between two partitions of the same size but with
 # different values at the beginning of the array.
 #
-
+# In the second implementation of the partitioning function, it is it's own
+# function because this implementation is not in the book. With avg2, after
+# each partition, it splits again into subarrays from 0 to j-1 and j to hi,
+# instead of from 0 to j and j+1 to hi. The reason for this is because
+# the pivot is created using the first and last values in the array, which
+# is why it keeps the equivalent values on the right, like the first
+# implementation of partition as well. Perhaps this comes to show that this
+# method of partitioning is not the best?
+#
 def partition(target, lo, hi):
     if lo == hi:
+        if lo == 0:
+            insertion_sort_by_index(target, lo, hi+1)
+        else:
+            insertion_sort_by_index(target, lo-1, hi)
         return
 
     if hi-lo+1 <= 15:
@@ -177,8 +190,6 @@ def partition(target, lo, hi):
         return
 
     pivot = target[lo]
-    print("partitioning", lo, hi, "with pivot", pivot)
-    print(target)
     i = lo
     j = hi
     while i < j:
@@ -189,14 +200,12 @@ def partition(target, lo, hi):
         if j <= i:
             break
 
-        print("i and j", i, j)
-        print(target)
         temp = target[i]
         target[i] = target[j]
         target[j] = temp
-        print(target)
 
-    partition(target, 0, j)
+    print(target)
+    partition(target, lo, j)
     partition(target, j + 1, hi)
 
 
@@ -205,8 +214,8 @@ def quick_sort(target):
     partition(target, 0, len(target)-1)
 
 
-
-def partition_med3(target, lo, hi):
+# not really how it's done. should be called avg2
+def partition_avg2(target, lo, hi):
 
     if lo == hi:
         return
@@ -219,24 +228,24 @@ def partition_med3(target, lo, hi):
     i = lo
     j = hi
     while i < j:
-        while i < j and target[i] <= pivot:
+        while i < j and target[i] < pivot:
             i += 1
-        while j > i and target[j] > pivot:
+        while j > i and target[j] >= pivot:
             j -= 1
-        if i >= j:
+        if j <= i:
             break
 
         temp = target[i]
         target[i] = target[j]
         target[j] = temp
 
-    partition_med3(target, 0, j)
-    partition_med3(target, j + 1, hi)
+    partition_avg2(target, 0, j-1)
+    partition_avg2(target, j, hi)
 
 
-def quick_sort_med3(target):
+def quick_sort_avg2(target):
     random.shuffle(target)
-    partition_med3(target, 0, len(target)-1)
+    partition_avg2(target, 0, len(target)-1)
 
 
 

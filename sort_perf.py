@@ -19,28 +19,22 @@ def runtime(data, sorter):
 
 def main():
 
-    algos = [sorted, insertion_sort, shell_sort, \
-             # td_sort, bu_sort, \
-             quick_sort # ,
-             # quick_sort_med3,
-             # quick_sort_3way #, \
-             # swim_sink_sort
-            ]
-
-
+    algos = [sorted, quick_sort, quick_sort_avg2]
     # smaller sample to check validity
     # (except for python's sorted function)
     # NOTE: later use test functions to sort against sorted instead
-    test_a = [5 for _ in range(5)]
-    test_b = [4 for _ in range(4)]
-    test_c = [i for i in range(15)]
-    test = test_a + test_b + test_c
+    #test_a = [5 for _ in range(5)]
+    #test_b = [4 for _ in range(4)]
+    #test_c = [i for i in range(15)]
+    #test = test_a + test_b + test_c
+
+    test = [i for i in range(20)]
+    random.shuffle(test)
     print("ORIG:", test)
     print("ORIG:", sorted(test))
 
     for algo in algos[1:]:
         target = test[:]
-        # random.shuffle(target)
         print("\n{}: ".format(algo.__name__))
         algo(target)
         print("{}: {}".format("GOOD" if target == sorted(test) else "BAD ",
