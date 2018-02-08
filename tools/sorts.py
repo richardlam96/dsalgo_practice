@@ -1,5 +1,10 @@
 from numpy import random
 
+def exchange(target, i, j):
+    temp = target[i]
+    target[i] = target[j]
+    target[j] = temp
+    print(target)
 
 # INSERTION SORT ##############################################################
 # Insertion sort goes through each element in the array starting from the
@@ -151,13 +156,20 @@ def bu_sort(target):
 # and then recursively sorts the less than and greater than partititons.
 # In other words, this implementation is entropy optimal.
 #
-# NOTE: These implementations have not been check with the book but they
+# NOTE: These implementations have not been checked with the book but they
 # are still pretty fast. As of now, quick_sort_med3 has about the same
 # performance in a random case as quick_sort_3way.
 #
+# NOTE: In the first implementation of the partition function, the values
+# that are equal to the pivot need to be on the right becuase that
+# partitioning scheme grabs values from the left. If values equal are
+# placed on the left, sometimes, the algorithm will reach a point where it
+# will indefinitely switch between two partitions of the same size but with
+# different values at the beginning of the array.
+#
 
 def partition(target, lo, hi):
-    if hi-lo+1 <= 1:
+    if lo == hi:
         return
 
     if hi-lo+1 <= 15:
@@ -165,29 +177,37 @@ def partition(target, lo, hi):
         return
 
     pivot = target[lo]
+    print("partitioning", lo, hi, "with pivot", pivot)
+    print(target)
     i = lo
     j = hi
     while i < j:
         while i < j and target[i] < pivot:
             i += 1
-        while i < j and target[j] > pivot:
+        while i < j and target[j] >= pivot:
             j -= 1
-        if i >= j:
+        if j <= i:
             break
 
+        print("i and j", i, j)
+        print(target)
         temp = target[i]
         target[i] = target[j]
         target[j] = temp
+        print(target)
 
     partition(target, 0, j)
     partition(target, j + 1, hi)
+
 
 def quick_sort(target):
     random.shuffle(target)
     partition(target, 0, len(target)-1)
 
 
+
 def partition_med3(target, lo, hi):
+
     if lo == hi:
         return
 
@@ -199,7 +219,7 @@ def partition_med3(target, lo, hi):
     i = lo
     j = hi
     while i < j:
-        while i < j and target[i] < pivot:
+        while i < j and target[i] <= pivot:
             i += 1
         while j > i and target[j] > pivot:
             j -= 1
@@ -210,7 +230,6 @@ def partition_med3(target, lo, hi):
         target[i] = target[j]
         target[j] = temp
 
-
     partition_med3(target, 0, j)
     partition_med3(target, j + 1, hi)
 
@@ -220,14 +239,10 @@ def quick_sort_med3(target):
     partition_med3(target, 0, len(target)-1)
 
 
+
 def partition_3way(target, lo, hi):
     if lo == hi:
         return
-
-    if hi-lo+1 <= 15:
-        insertion_sort_by_index(target, lo, hi)
-        return
-
 
     pivot = target[lo]
     p = lo + 1          # forward moving indicies
@@ -240,9 +255,7 @@ def partition_3way(target, lo, hi):
     while i < j:
         while i < j:
             if target[i] == pivot:
-                temp = target[p]
-                target[p] = target[i]
-                target[i] = p
+                exchange(target, p, i)
                 p += 1
             if target[i] < pivot:
                 i += 1
@@ -250,9 +263,7 @@ def partition_3way(target, lo, hi):
                 break;
         while i < j:
             if target[j] == pivot:
-                temp = target[q]
-                target[q] = target[j]
-                target[j] = temp
+                exchange(target, q, j)
                 q -= 1
             if target[j] > pivot:
                 j -= 1
@@ -262,27 +273,25 @@ def partition_3way(target, lo, hi):
         if j <= i:
             break
 
-        temp = target[i]
-        target[i] = target[j]
-        target[j] = temp
+        exchange(target, i, j)
 
     # switch values so that values equal to pivot are in the middle
     # first, from first index to j (last value smaller than pivot)
-    for x in range(lo, p+1):
-        target[x] = target[j]
-        target[j] = pivot
-        j -= 1
+    k = lo
+    for x in reversed(range(p, j+1)):
+        exchange(target, k, x)
+        k += 1
+
     k = hi
     for x in range(i, q+1):
-        target[x] = target[k]
-        target[k] = pivot
+        exchange(target, k, x)
         k -= 1
 
-    partition_3way(target, lo, p)
-    partition_3way(target, q, hi)
+    partition_3way(target, lo, lo + (j-p))
+    partition_3way(target, hi - (q-i), hi)
 
 def quick_sort_3way(target):
-    random.shuffle(target)
+    # random.shuffle(target)
     partition_3way(target, 0, len(target)-1)
 
 
