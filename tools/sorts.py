@@ -1,5 +1,10 @@
 from numpy import random
 
+def exchange(target, i, j):
+    temp = target[i]
+    target[i] = target[j]
+    target[j] = temp
+    print(target)
 
 # INSERTION SORT ##############################################################
 # Insertion sort goes through each element in the array starting from the
@@ -19,7 +24,21 @@ def insertion_sort(target):
                 target[j] = target[j-1]
                 j -= 1
             else:
-                break;
+                break
+        target[j] = pivot
+
+
+def insertion_sort_by_index(target, lo, hi):
+    print("bang, inserstioned", lo, hi)
+    for i in range(lo, hi+1):
+        pivot = target[i]
+        j = i
+        while j - 1 >= 0:
+            if target[j-1] > pivot:
+                target[j] = target[j-1]
+                j -= 1
+            else:
+                break
         target[j] = pivot
 
 
@@ -75,19 +94,18 @@ def shell_sort(target):
 #
 
 def merge(target, aux, lo, mid, hi):
-
+    # copy values to aux
     for i in range(lo, hi+1):
         aux[i] = target[i]
 
-    # indicies for accessing aux
-    i = 0
-    mid = mid - lo
-    j = mid + 1
+    # aux will use the same indicies
+    i = lo                              # beg of first subarray
+    j = mid + 1                        # beg of second subarray
     for k in range(lo, hi+1):
-        if i > mid:
+        if i > mid:                    # left is exhausted
             target[k] = aux[j]
             j += 1
-        elif j > (hi-lo):
+        elif j > hi:                   # right is exhausted
             target[k] = aux[i]
             i += 1
         elif aux[i] < aux[j]:
@@ -98,14 +116,14 @@ def merge(target, aux, lo, mid, hi):
             j += 1
 
 def td_sort(target):
-    aux = [None] * target.size
+    aux = [None] * len(target)
     td_aux_sort(target, aux, 0, len(target)-1)
 
 def td_aux_sort(target, aux, lo, hi):
-    if hi <= lo: return
+    if hi <= lo:
+        return
     if hi-lo+1 <= 15:
         insertion_sort(target[lo:hi+1])
-        return
     mid = lo + (hi-lo)//2
     td_aux_sort(target, aux, lo, mid)
     td_aux_sort(target, aux, mid+1, hi)
@@ -113,7 +131,7 @@ def td_aux_sort(target, aux, lo, hi):
 
 
 def bu_sort(target):
-    N = target.size
+    N = len(target)
     aux = [None] * N
     sizes = (2**i for i in range(0, N) if 2**i < N)
     for size in sizes:
@@ -124,7 +142,7 @@ def bu_sort(target):
 # QUICK SORT ##################################################################
 # There are two kinds of quick sort, one that will assume no knowledge of data
 # and another that will assume that there are duplicate values in the data.
-# 
+#
 # In general, the quick sort chooses an element in the array as a 'pivot' and
 # uses that to move the other elements either to the left, if it is less than
 # the pivot, or to the right, if it is greater than the pivot. This is shown
@@ -139,40 +157,55 @@ def bu_sort(target):
 # and then recursively sorts the less than and greater than partititons.
 # In other words, this implementation is entropy optimal.
 #
-# NOTE: These implementations have not been check with the book but they
-# are still pretty fast. As of now, quick_sort_med3 has about the same
+# NOTE: These implementations have not been checked with the book but they
+# are still pretty fast. As of now, quick_sort_avg2 has about the same
 # performance in a random case as quick_sort_3way.
 #
-
+# NOTE: In the first implementation of the partition function, the values
+# that are equal to the pivot need to be on the right becuase that
+# partitioning scheme grabs values from the left. If values equal are
+# placed on the left, sometimes, the algorithm will reach a point where it
+# will indefinitely switch between two partitions of the same size but with
+# different values at the beginning of the array.
+#
+# In the second implementation of the partitioning function, it is it's own
+# function because this implementation is not in the book. With avg2, after
+# each partition, it splits again into subarrays from 0 to j-1 and j to hi,
+# instead of from 0 to j and j+1 to hi. The reason for this is because
+# the pivot is created using the first and last values in the array, which
+# is why it keeps the equivalent values on the right, like the first
+# implementation of partition as well. Perhaps this comes to show that this
+# method of partitioning is not the best?
+#
 def partition(target, lo, hi):
     if lo == hi:
+        if lo == 0:
+            insertion_sort_by_index(target, lo, hi+1)
+        else:
+            insertion_sort_by_index(target, lo-1, hi)
         return
 
     if hi-lo+1 <= 15:
-        insertion_sort(target[lo:hi+1])
+        insertion_sort_by_index(target, lo, hi)
         return
-    
+
     pivot = target[lo]
     i = lo
     j = hi
     while i < j:
         while i < j and target[i] < pivot:
             i += 1
-        while j > i and target[j] >= pivot:
+        while i < j and target[j] >= pivot:
             j -= 1
-        if j > i:
+        if j <= i:
             break
-        elif j == i:    # already partitioned or finished
-            return
+
         temp = target[i]
         target[i] = target[j]
         target[j] = temp
 
-
-    target[lo] = target[j]
-    target[j] = pivot
-
-    partition(target, 0, j)
+    print(target)
+    partition(target, lo, j)
     partition(target, j + 1, hi)
 
 
@@ -181,15 +214,17 @@ def quick_sort(target):
     partition(target, 0, len(target)-1)
 
 
-def partition_med3(target, lo, hi):
+# not really how it's done. should be called avg2
+def partition_avg2(target, lo, hi):
+
     if lo == hi:
         return
 
     if hi-lo+1 <= 15:
-        insertion_sort(target[lo:hi+1])
+        insertion_sort_by_index(target, lo, hi)
         return
-    
-    pivot = (target[lo] + target[hi]) / 2 
+
+    pivot = (target[lo] + target[hi]) / 2
     i = lo
     j = hi
     while i < j:
@@ -197,32 +232,26 @@ def partition_med3(target, lo, hi):
             i += 1
         while j > i and target[j] >= pivot:
             j -= 1
-        if j > i:
+        if j <= i:
             break
-        elif j == i:    # already partitioned or finished
-            return
+
         temp = target[i]
         target[i] = target[j]
         target[j] = temp
 
+    partition_avg2(target, 0, j-1)
+    partition_avg2(target, j, hi)
 
-    partition(target, 0, j)
-    partition(target, j + 1, hi)
 
-
-def quick_sort_med3(target):
+def quick_sort_avg2(target):
     random.shuffle(target)
-    partition(target, 0, len(target)-1)
+    partition_avg2(target, 0, len(target)-1)
+
 
 
 def partition_3way(target, lo, hi):
     if lo == hi:
         return
-
-    if hi-lo+1 <= 15:
-        insertion_sort(target[lo:hi+1])
-        return
-
 
     pivot = target[lo]
     p = lo + 1          # forward moving indicies
@@ -235,9 +264,7 @@ def partition_3way(target, lo, hi):
     while i < j:
         while i < j:
             if target[i] == pivot:
-                temp = target[p]
-                target[p] = target[i]
-                target[i] = p
+                exchange(target, p, i)
                 p += 1
             if target[i] < pivot:
                 i += 1
@@ -245,41 +272,67 @@ def partition_3way(target, lo, hi):
                 break;
         while i < j:
             if target[j] == pivot:
-                temp = target[q]
-                target[q] = target[j]
-                target[j] = temp
-                q += 1
+                exchange(target, q, j)
+                q -= 1
             if target[j] > pivot:
-                j+= 1
+                j -= 1
             elif target[j] < pivot:
                 break;
 
-        if j < i:
+        if j <= i:
             break
-        elif j == i:
-            return
 
-        temp = target[i]
-        target[i] = target[j]
-        target[j] = temp
+        exchange(target, i, j)
 
     # switch values so that values equal to pivot are in the middle
     # first, from first index to j (last value smaller than pivot)
-    for x in range(lo, p+1):
-        target[x] = target[j]
-        target[j] = pivot
-        j -= 1
+    k = lo
+    for x in reversed(range(p, j+1)):
+        exchange(target, k, x)
+        k += 1
+
     k = hi
     for x in range(i, q+1):
-        target[x] = target[k]
-        target[k] = pivot
+        exchange(target, k, x)
         k -= 1
 
-    partition_3way(target, lo, p)
-    partition_3way(target, q, hi)
+    partition_3way(target, lo, lo + (j-p))
+    partition_3way(target, hi - (q-i), hi)
 
 def quick_sort_3way(target):
-    random.shuffle(target)
-    partition(target, 0, len(target)-1)
+    # random.shuffle(target)
+    partition_3way(target, 0, len(target)-1)
 
 
+# HEAPSORT ###################################################################
+# Heap sort uses the sink function from HeapPQ and IndexPQ to sort an array
+# in two phases: the heap construction and the sortdown
+#
+
+def swim(target):
+    for i in reversed(range(len(target))):
+        if (i // 2) >= 0:
+            if target[i] > target[i // 2]:
+                temp = target[i]
+                target[i] = target[i // 2]
+                target[i // 2] = temp
+
+
+def sink(target):
+    for i in range(len(target)):
+        if (2*i) < len(target) and target[i] < target[2*i]:
+            temp = target[i]
+            target[i] = target[2*i]
+            target[2*i] = temp
+        if (2*i + 1) < len(target) and target[i] < target[2*i + 1]:
+            temp = target[i]
+            target[i] = target[2*i + 1]
+            target[2*i + 1] = temp
+
+
+def swim_sink_sort(target):
+    swim(target)
+    sink(target)
+
+def heap_sort(target):
+    pass

@@ -19,7 +19,7 @@ def runtime(data, sorter):
 
 def main():
 
-    algos = [sorted, quick_sort]
+    algos = [sorted, quick_sort, quick_sort_avg2]
     # smaller sample to check validity
     # (except for python's sorted function)
     # NOTE: later use test functions to sort against sorted instead
