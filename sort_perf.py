@@ -28,8 +28,7 @@ def main():
     #test_c = [i for i in range(15)]
     #test = test_a + test_b + test_c
 
-    test = [i for i in range(20)]
-    random.shuffle(test)
+    test = [9,15,10,18,11,4,8,0,7,12,2,14,13,19,3,1,17,5,6,16]
     print("ORIG:", test)
     print("ORIG:", sorted(test))
 

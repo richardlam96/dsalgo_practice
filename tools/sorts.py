@@ -4,7 +4,6 @@ def exchange(target, i, j):
     temp = target[i]
     target[i] = target[j]
     target[j] = temp
-    print(target)
 
 # INSERTION SORT ##############################################################
 # Insertion sort goes through each element in the array starting from the
@@ -29,8 +28,7 @@ def insertion_sort(target):
 
 
 def insertion_sort_by_index(target, lo, hi):
-    print("bang, inserstioned", lo, hi)
-    for i in range(lo, hi+1):
+    for i in range(lo+1, hi+1):
         pivot = target[i]
         j = i
         while j - 1 >= 0:
@@ -166,7 +164,9 @@ def bu_sort(target):
 # partitioning scheme grabs values from the left. If values equal are
 # placed on the left, sometimes, the algorithm will reach a point where it
 # will indefinitely switch between two partitions of the same size but with
-# different values at the beginning of the array.
+# different values at the beginning of the array. Also, the traveling i
+# and j indicies need to cross each other to avoid a case where they
+# are both pointing to the same value and having insertion_sort take over.
 #
 # In the second implementation of the partitioning function, it is it's own
 # function because this implementation is not in the book. With avg2, after
@@ -178,6 +178,7 @@ def bu_sort(target):
 # method of partitioning is not the best?
 #
 def partition(target, lo, hi):
+
     if lo == hi:
         if lo == 0:
             insertion_sort_by_index(target, lo, hi+1)
@@ -193,18 +194,15 @@ def partition(target, lo, hi):
     i = lo
     j = hi
     while i < j:
-        while i < j and target[i] < pivot:
+        while i < hi and target[i] < pivot:
             i += 1
-        while i < j and target[j] >= pivot:
+        while j > lo and target[j] >= pivot:
             j -= 1
         if j <= i:
             break
 
-        temp = target[i]
-        target[i] = target[j]
-        target[j] = temp
+        exchange(target, i, j)
 
-    print(target)
     partition(target, lo, j)
     partition(target, j + 1, hi)
 
@@ -214,10 +212,14 @@ def quick_sort(target):
     partition(target, 0, len(target)-1)
 
 
-# not really how it's done. should be called avg2
+
 def partition_avg2(target, lo, hi):
 
     if lo == hi:
+        if lo == 0:
+            insertion_sort_by_index(target, lo, hi+1)
+        else:
+            insertion_sort_by_index(target, lo-1, hi)
         return
 
     if hi-lo+1 <= 15:
