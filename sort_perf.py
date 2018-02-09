@@ -1,10 +1,10 @@
 import time
-from matplotlib import pyplot as plt
-from numpy import random, sum
-from functools import partial
+# from matplotlib import pyplot as plt
+from numpy import random
+# from functools import partial
 
-from comparable import Comparable
-from sorts import shell_sort, td_sort, bu_sort, quick_sort, quick_sort_med3, quick_sort_3way
+# from tools.comparable import Comparable
+from tools.sorts import *
 
 
 
@@ -19,19 +19,28 @@ def runtime(data, sorter):
 
 def main():
 
-    algos = [sorted, shell_sort, td_sort, bu_sort, quick_sort, quick_sort_med3, quick_sort_3way]
-
-
+    algos = [sorted, quick_sort]
     # smaller sample to check validity
     # (except for python's sorted function)
     # NOTE: later use test functions to sort against sorted instead
+    #test_a = [5 for _ in range(5)]
+    #test_b = [4 for _ in range(4)]
+    #test_c = [i for i in range(15)]
+    #test = test_a + test_b + test_c
+
+    test = [i for i in range(20)]
+    random.shuffle(test)
+    print("ORIG:", test)
+    print("ORIG:", sorted(test))
+
     for algo in algos[1:]:
-        target = Comparable(10)
+        target = test[:]
         print("\n{}: ".format(algo.__name__))
-        algo(target.data())
-        print(target.data())
+        algo(target)
+        print("{}: {}".format("GOOD" if target == sorted(test) else "BAD ",
+                             target))
 
-
+'''
     # larger samples to compare time
     doublingN = [500*2**n for n in range(0, 4)]
     for algo in algos:
@@ -46,7 +55,7 @@ def main():
                         end=" ")
     print("\n")
 
-
+'''
     # need to decide what and how data should be displayed
     # maybe find average of values greater than zero and scatter or bar
     # or learn histograms
