@@ -19,7 +19,7 @@ def runtime(data, sorter):
 
 def main():
 
-    algos = [sorted, quick_sort, quick_sort_avg2]
+    algos = [sorted, quick_sort_3way]
     # smaller sample to check validity
     # (except for python's sorted function)
     # NOTE: later use test functions to sort against sorted instead
@@ -28,13 +28,15 @@ def main():
     #test_c = [i for i in range(15)]
     #test = test_a + test_b + test_c
 
-    test = [9,15,10,18,11,4,8,0,7,12,2,14,13,19,3,1,17,5,6,16]
+    test = [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,6,6,6,6,6,6,66]
     print("ORIG:", test)
     print("ORIG:", sorted(test))
 
     for algo in algos[1:]:
         target = test[:]
         print("\n{}: ".format(algo.__name__))
+        random.shuffle(target)
+        print(target)
         algo(target)
         print("{}: {}".format("GOOD" if target == sorted(test) else "BAD ",
                              target))

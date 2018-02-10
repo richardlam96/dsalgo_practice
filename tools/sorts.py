@@ -252,7 +252,16 @@ def quick_sort_avg2(target):
 
 
 def partition_3way(target, lo, hi):
+
     if lo == hi:
+        if lo == 0:
+            insertion_sort_by_index(target, lo, hi+1)
+        else:
+            insertion_sort_by_index(target, lo-1, hi)
+        return
+
+    if hi-lo+1 <= 15:
+        insertion_sort_by_index(target, lo, hi)
         return
 
     pivot = target[lo]
@@ -263,8 +272,8 @@ def partition_3way(target, lo, hi):
 
     # sort so that values == pivot are on left and right
     # with values < and > pivot between, respectively
-    while i < j:
-        while i < j:
+    while True:
+        while i < hi:
             if target[i] == pivot:
                 exchange(target, p, i)
                 p += 1
@@ -272,7 +281,7 @@ def partition_3way(target, lo, hi):
                 i += 1
             elif target[i] > pivot:
                 break;
-        while i < j:
+        while j > lo:
             if target[j] == pivot:
                 exchange(target, q, j)
                 q -= 1
@@ -284,22 +293,32 @@ def partition_3way(target, lo, hi):
         if j <= i:
             break
 
+        print("exch", target[i], target[j])
+        print(target)
         exchange(target, i, j)
+        print(target)
 
+    print("rearrange")
+    print(target)
     # switch values so that values equal to pivot are in the middle
     # first, from first index to j (last value smaller than pivot)
     k = lo
     for x in reversed(range(p, j+1)):
         exchange(target, k, x)
         k += 1
+        if k < p: break
 
     k = hi
     for x in range(i, q+1):
         exchange(target, k, x)
         k -= 1
+        if k > q: break
 
-    partition_3way(target, lo, lo + (j-p))
-    partition_3way(target, hi - (q-i), hi)
+    print(target)
+
+    partition_3way(target, lo, j-(lo-p))
+    partition_3way(target, i+(hi-q), hi)
+
 
 def quick_sort_3way(target):
     # random.shuffle(target)
