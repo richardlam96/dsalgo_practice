@@ -1,7 +1,13 @@
+import sys
+import os.path
+sys.path.append(os.path.join(os.path.dirname(__file__), "../tools"))
+
 from stack import Stack
 
+
+
 def main():
-    
+
     test = Stack()
 
     push_n = 1000

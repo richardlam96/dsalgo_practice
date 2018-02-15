@@ -1,4 +1,8 @@
-from tools.heappq import HeapPQ
+import sys
+import os.path
+sys.path.append(os.path.join(os.path.dirname(__file__), "../tools"))
+
+from heappq import HeapPQ
 from numpy import random
 
 

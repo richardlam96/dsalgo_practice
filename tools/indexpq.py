@@ -15,7 +15,6 @@
 # change() function.
 #
 
-
 class IndexPQ(object):
 
     def __init__(self, N=10):

@@ -1,4 +1,8 @@
-from tools.indexpq import IndexPQ
+import sys
+import os.path
+sys.path.append(os.path.join(os.path.dirname(__file__), "../tools"))
+
+from indexpq import IndexPQ
 from numpy import random
 
 

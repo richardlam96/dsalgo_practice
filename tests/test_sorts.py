@@ -1,10 +1,13 @@
 import unittest
+import sys
+import os.path
+sys.path.append(os.path.join(os.path.dirname(__file__), "../tools"))
 
 from numpy import random
 
-from tools.sorts import insertion_sort, shell_sort, \
-                        td_sort, bu_sort, \
-                        quick_sort, quick_sort_avg2, quick_sort_3way
+from sorts import insertion_sort, shell_sort, \
+                  td_sort, bu_sort, \
+                  quick_sort, quick_sort_avg2, quick_sort_3way
 
 
 
