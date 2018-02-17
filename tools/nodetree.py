@@ -4,6 +4,16 @@
 # through the binary tree which has a height close to logN.
 #
 # NOTE: about some of the functions:
+#   - Probably the most important: The implementation of the insert function
+#     does not allow duplicates in the tree. And this does not imply that
+#     simply removing the respective conditional statements removes
+#     this feature. (It wouldn't really change anything).
+#     Perhaps a better way to deal with this is to have a Node implementation
+#     that uses a tuple to store a data value and the number of occurences or
+#     a dictionary with the same key and value pairs.
+#     Turns out adding a data member in node for frequency turns the tree into
+#     a Huffman Tree.
+#
 #   - The has() function works. Though there may be a simpler way to write it,
 #     all the else: break's in there are necessary to get it working.
 #     and _remove_two_child() uses the same structure.

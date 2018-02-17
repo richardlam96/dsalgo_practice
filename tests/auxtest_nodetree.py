@@ -6,17 +6,27 @@ from nodetree import NodeTree
 
 
 def main():
-    sample_tree = NodeTree()
-    sample_input = [i for i in range(10)]
 
-    # test insert function
+    # Initialize object object and samples here ###########################
+    # Test Object:
+    sample_tree = NodeTree()
+
+    # Test Sample:
+    sample_input = []
+    for i in range(5):
+        for _ in range(i):
+            sample_input.append(i)
+    # random.shuffle(target_sm)
+
     for value in sample_input:
         sample_tree.insert(value)
 
+
+    # Begin testing functions here ###########################################
+    # Initial View:
     print(sample_tree.get_array())
 
-    sample_tree.remove(1)
-    print(sample_tree.has(1))
+
 
 
 if __name__ == '__main__':

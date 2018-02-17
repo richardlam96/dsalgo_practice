@@ -58,8 +58,33 @@ class NodeTreeTests(unittest.TestCase):
 
 
     def test_remove_nonexist_val(self):
-        self.assertFalse(self.sample_tree.remove(100000))
+        self.assertFalse(self.sample_tree.remove(100000000000000000000000000))
 
+
+
+class NodeTreeTestWithDuplicates(NodeTreeTests):
+    """
+    Test class that inherits from the above 'base' class but uses a target with
+    duplicate values.
+
+    With the current implementation of NodeTree however, this is will not work.
+    Probably more accurate to test distinct values.
+    """
+
+    def setUp(self):
+        self.sample_tree = NodeTree()
+        self.target_sm = []
+        for i in range(5):
+            for _ in range(i):
+                self.target_sm.append(i)
+        random.shuffle(self.target_sm)
+
+        for val in self.target_sm:
+            self.sample_tree.insert(val)
+
+
+    def test_existing_values(self):
+        super().test_existing_values()
 
 
 
