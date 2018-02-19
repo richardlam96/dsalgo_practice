@@ -59,13 +59,20 @@ class HuffmanMachine(object):
         self.head = Node()
         self.alpha_array = []
         self.message = target_string
+        self.char_key = {}            # could be a N initialized array
 
+
+    def run(self):
         self.count_frequencies()
         self.sort_alpha()
+        self.build_node_tree()
+        self.build_char_key()
 
 
     def count_frequencies(self):
         """
+        First step of the Huffman Code.
+
         Sort input by frequency and put it in...frequency array?
         Then it would have to be an array of Nodes.
 
@@ -92,8 +99,11 @@ class HuffmanMachine(object):
 
 
     def sort_alpha(self):
-        # sort the frequencies and chars arrays so that they are sorted by
-        # frequency
+        """
+        Second step of the Huffman Code as well as a reused step.
+        """
+        # sort the alpha arrays so that is is sorted by
+        # frequency, which means not necessarily alphabetical order.
         # used: modified shell_sort
         n = len(self.alpha_array)
         gap = 1
@@ -107,7 +117,7 @@ class HuffmanMachine(object):
                 j = i
                 while (j - gap) >= 0:
                     if self.alpha_array[j-gap].frequency > pivot.frequency:
-                        self.alpha_array[j] = self.alpha_arry[j-gap]
+                        self.alpha_array[j] = self.alpha_array[j-gap]
                     else:
                         break
                     j -= gap
@@ -115,21 +125,83 @@ class HuffmanMachine(object):
             gap = (gap - 1) // 3
 
 
+    def build_node_tree(self):
+        """
+        Third step of the Huffman Code that relies on second step.
+        """
+        # connect first two nodes of the sorted array that contains them,
+        # resort, and repeat until all that is left in the array is the
+        # root node of the whole tree.
+        while len(self.alpha_array) > 1:
+            new_node = Node()
+            new_node.frequency = self.alpha_array[0].frequency + \
+                                 self.alpha_array[1].frequency
+            new_node.left = self.alpha_array.pop(0)
+            new_node.right = self.alpha_array.pop(0)
+            self.alpha_array.append(new_node)
+            self.sort_alpha()
+        self.head = self.alpha_array[0]
+
+        # relieve alpha_array?
+
+
+    def build_char_key(self):
+        while self.head.frequency > 0:
+            current = self.head
+            # traverse through None Nodes and keep track of the path traversed.
+            track = ""
+            while current.data == None and self.head.frequency > 0:
+                if current.left.frequency > 0:
+                    current = current.left
+                    track += "0"
+                elif current.right.frequency > 0:
+                    current = current.right
+                    track += "1"
+                else: # both left and right frequencies are 0
+                    current.frequency = 0
+                    current = self.head
+
+            # arrive at a Node with a value and store it.
+            # set frequency to 0 to mark that it has been stored.
+            self.char_key[current.data] = track
+            current.frequency = 0
+
+
+    def encode(self):
+        encoded_message = ""
+        for char in self.message:
+            encoded_message += self.char_key[char]
+        return encoded_message
+
+
+    def decode(self, encoded_message):
+        decoded_message = ""
+        current = self.head
+        for char in encoded_message:
+            if current.data == None:
+                if char == "0":
+                    current = current.left
+                elif char == "1":
+                    current = current.right
+                else:
+                    # return or throw an exception
+                    return ""
+            else:
+                decoded_message += current.data
+                current = self.head
+        return decoded_message
+
+
     # FOR TESTING!
+    def get_dict(self):
+        ret = {}
+        for alpha in self.alpha_array:
+            ret[alpha.data] = alpha.frequency
+        return ret
+
+
     def print_alpha(self):
         for alpha in self.alpha_array:
             print(alpha.data, alpha.frequency)
 
-
-    def build_node_tree(self):
-        for alpha in self.alpha_array:
-            pass
-
-
-    def encode(self):
-        pass
-
-
-    def decode(self):
-        pass
 

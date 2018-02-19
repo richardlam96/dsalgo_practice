@@ -7,10 +7,11 @@ from huffman import HuffmanMachine
 
 def main():
 
-    sample_input = "pizza"
+    sample_input = "ninja turtles love pizza."
     sample_machine = HuffmanMachine(sample_input)
 
-    sample_machine.print_alpha()
+    sample_machine.run()
+    print(sample_machine.encode())
 
 
 
