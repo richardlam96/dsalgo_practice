@@ -46,7 +46,9 @@ class NodeTree(object):
 
 
     def has(self, value):
-        """Essentially a binary search."""
+        """
+        Essentially a binary search.
+        """
         if self.head.data == None:
             return False
 
@@ -72,7 +74,9 @@ class NodeTree(object):
 
 
     def insert(self, value):
-        """Attempts to insert a given value, but returns if it is a dup."""
+        """
+        Attempts to insert a given value, but returns if it is a dup.
+        """
         current = self.head
 
         if current.data == None:
@@ -98,7 +102,9 @@ class NodeTree(object):
 
 
     def remove(self, value):
-        """Removes given value if it can be found."""
+        """
+        Removes given value if it can be found.
+        """
         # find value with same algorithm as has() function
         current = self.head
 
