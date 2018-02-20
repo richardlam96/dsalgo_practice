@@ -116,7 +116,9 @@ class HuffmanMachine(object):
                 pivot = self.alpha_array[i]
                 j = i
                 while (j - gap) >= 0:
-                    if self.alpha_array[j-gap].frequency > pivot.frequency:
+                    if self.alpha_array[j-gap].frequency > pivot.frequency or \
+                       (self.alpha_array[j-gap].frequency == pivot.frequency and \
+                        pivot.data == None):
                         self.alpha_array[j] = self.alpha_array[j-gap]
                     else:
                         break
@@ -141,7 +143,6 @@ class HuffmanMachine(object):
             self.alpha_array.append(new_node)
             self.sort_alpha()
         self.head = self.alpha_array[0]
-
         # relieve alpha_array?
 
 
@@ -177,18 +178,21 @@ class HuffmanMachine(object):
     def decode(self, encoded_message):
         decoded_message = ""
         current = self.head
+        track = ""   # testing
         for char in encoded_message:
+            print("looking at", char)
             if current.data == None:
-                if char == "0":
+                if char == "0" and current.left:
                     current = current.left
-                elif char == "1":
+                    track += "0"   # testing
+                elif char == "1" and current.right:
                     current = current.right
-                else:
-                    # return or throw an exception
-                    return ""
-            else:
-                decoded_message += current.data
-                current = self.head
+                    track += "1"   # testing
+                if current.data != None:
+                    decoded_message += current.data
+                    print(current.data, track)
+                    current = self.head
+                    track = ""
         return decoded_message
 
 
@@ -204,4 +208,11 @@ class HuffmanMachine(object):
         for alpha in self.alpha_array:
             print(alpha.data, alpha.frequency)
 
-
+    def print_tree(self, node):
+        """Use after the node tree is built."""
+        current = node
+        print(current.data, current.frequency)
+        if current.left:
+            self.print_tree(current.left)
+        if current.right:
+            self.print_tree(current.right)

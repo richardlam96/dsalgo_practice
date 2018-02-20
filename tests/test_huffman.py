@@ -32,22 +32,26 @@ class HuffmanTestBase(unittest.TestCase):
 
 
     def test_build_node_tree(self):
-        self.sample_machine.run()
+        self.sample_machine.count_frequencies()
+        self.sample_machine.sort_alpha()
+        self.sample_machine.build_node_tree()
 
         # check that the array only carries the root
         # and that it has the a frequency equal to the lenth of the
         # sample input
         self.assertEqual(1, len(self.sample_machine.alpha_array))
         self.assertEqual(len(self.sample_input),
-                         self.sample_machine.alpha_array[0].frequency)
+                         self.sample_machine.head.frequency)
 
 
-    def test_encode_message(self):
-        pass
+    def test_encode_and_decode_message(self):
+        self.sample_machine.run()
+
+        encoded_message = self.sample_machine.encode()
+        decoded_message = self.sample_machine.decode(encoded_message)
+        self.assertEqual(decoded_message, self.sample_input)
 
 
-    def test_decode_message(self):
-        pass
 
 
 
