@@ -151,7 +151,7 @@ class HuffmanMachine(object):
             current = self.head
             # traverse through None Nodes and keep track of the path traversed.
             track = ""
-            while current.data == None and self.head.frequency > 0:
+            while current.data == None and current.frequency > 0:
                 if current.left.frequency > 0:
                     current = current.left
                     track += "0"
@@ -161,6 +161,7 @@ class HuffmanMachine(object):
                 else: # both left and right frequencies are 0
                     current.frequency = 0
                     current = self.head
+                    track = ""
 
             # arrive at a Node with a value and store it.
             # set frequency to 0 to mark that it has been stored.

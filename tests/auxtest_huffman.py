@@ -7,7 +7,7 @@ from huffman import HuffmanMachine
 
 def main():
 
-    sample_input = "cookies"
+    sample_input = "ninja turtles love pizza."
     sample_machine = HuffmanMachine(sample_input)
 
     # build the alpha array - works though has extra None object
