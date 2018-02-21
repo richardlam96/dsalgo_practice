@@ -12,7 +12,7 @@ class HuffmanTestBase(unittest.TestCase):
     """
 
     def setUp(self):
-        self.sample_input = "ninja turtles love pizza."
+        self.sample_input = "Ninja turtles love pizza. I love pizza too. But I love cookies more."
         self.sample_machine = HuffmanMachine(target_string=self.sample_input)
 
 
@@ -51,6 +51,15 @@ class HuffmanTestBase(unittest.TestCase):
         decoded_message = self.sample_machine.decode(encoded_message)
         self.assertEqual(decoded_message, self.sample_input)
 
+
+    def test_one_char_message(self):
+        self.sample_input = "A"
+        self.sample_machine = HuffmanMachine(self.sample_input)
+        self.sample_machine.run()
+
+        encoded_message = self.sample_machine.encode()
+        decoded_message = self.sample_machine.decode(encoded_message)
+        self.assertEqual(decoded_message, self.sample_input)
 
 
 

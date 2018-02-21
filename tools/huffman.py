@@ -181,7 +181,6 @@ class HuffmanMachine(object):
         current = self.head
         track = ""   # testing
         for char in encoded_message:
-            print("looking at", char)
             if current.data == None:
                 if char == "0" and current.left:
                     current = current.left
@@ -191,7 +190,6 @@ class HuffmanMachine(object):
                     track += "1"   # testing
                 if current.data != None:
                     decoded_message += current.data
-                    print(current.data, track)
                     current = self.head
                     track = ""
         return decoded_message
