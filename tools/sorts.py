@@ -1,5 +1,6 @@
 from numpy import random
 
+
 def exchange(target, i, j):
     temp = target[i]
     target[i] = target[j]

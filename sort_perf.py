@@ -4,7 +4,7 @@ from numpy import random
 # from functools import partial
 
 # from tools.comparable import Comparable
-from tools.sorts import quick_sort_3way
+from tools.sorts import shell_sort, quick_sort 
 
 
 # NOTE: Need to rewrite this file to do what it actually was meant to do,
@@ -33,30 +33,8 @@ def runtime(data, sorter):
 
 
 def main():
+    algos = [sorted, shell_sort, quick_sort]
 
-    algos = [quick_sort_3way]
-    # smaller sample to check validity
-    # (except for python's sorted function)
-    # NOTE: later use test functions to sort against sorted instead
-    #test_a = [5 for _ in range(5)]
-    #test_b = [4 for _ in range(4)]
-    #test_c = [i for i in range(15)]
-    #test = test_a + test_b + test_c
-
-    test = [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,6,6,6,6,6,6,66]
-    print("ORIG:", test)
-    print("ORIG:", sorted(test))
-
-    for algo in algos:
-        target = test[:]
-        print("\n{}: ".format(algo.__name__))
-        random.shuffle(target)
-        print(target)
-        algo(target)
-        print("{}: {}".format("GOOD" if target == sorted(test) else "BAD ",
-                             target))
-
-'''
     # larger samples to compare time
     doublingN = [500*2**n for n in range(0, 4)]
     for algo in algos:
@@ -71,12 +49,10 @@ def main():
                         end=" ")
     print("\n")
 
-'''
     # need to decide what and how data should be displayed
     # maybe find average of values greater than zero and scatter or bar
     # or learn histograms
-'''
-        plt.plot(doublingN, runtimes, label=algo.__name__)
+    plt.plot(doublingN, runtimes, label=algo.__name__)
 
 
 
@@ -91,7 +67,6 @@ def main():
         target.data().sort()
         print(time.time - start_time)
 
-'''
 
 if __name__ == "__main__":
     main()
