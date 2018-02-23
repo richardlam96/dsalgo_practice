@@ -4,9 +4,24 @@ from numpy import random
 # from functools import partial
 
 # from tools.comparable import Comparable
-from tools.sorts import *
+from tools.sorts import quick_sort_3way
 
 
+# NOTE: Need to rewrite this file to do what it actually was meant to do,
+# which is to show the performance of the sort functions using matplotlib.
+# Right now, it is just an auxillary test file to test specific sorts with
+# specific inputs and should be very verbal.
+#
+# This file is really only used for quick_sort_3way, now that the other
+# sorts are working fine, though none of them have been analyzed.
+# There will be an overhaul of the sorting functions, which may only end up
+# being one or two in a different file using Comparable objects and other
+# objects that inherit from Comparable.
+#
+# So, the end product of this file, sort_perf, should use the old sorts module
+# and some basic randomized integer lists to keep things simple and to keep
+# the focus on the analysis of speed.
+#
 
 # move to sorts file to make it importable?
 # or can you import from here?
@@ -19,7 +34,7 @@ def runtime(data, sorter):
 
 def main():
 
-    algos = [sorted, quick_sort_3way]
+    algos = [quick_sort_3way]
     # smaller sample to check validity
     # (except for python's sorted function)
     # NOTE: later use test functions to sort against sorted instead
@@ -32,7 +47,7 @@ def main():
     print("ORIG:", test)
     print("ORIG:", sorted(test))
 
-    for algo in algos[1:]:
+    for algo in algos:
         target = test[:]
         print("\n{}: ".format(algo.__name__))
         random.shuffle(target)

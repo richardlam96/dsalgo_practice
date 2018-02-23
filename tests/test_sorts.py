@@ -6,17 +6,21 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../tools"))
 from numpy import random
 
 from sorts import insertion_sort, shell_sort, \
-                  td_sort, bu_sort, \
-                  quick_sort, quick_sort_avg2, quick_sort_3way
-
+                 td_sort, bu_sort, \
+                 quick_sort, quick_sort_avg2, quick_sort_3way
 
 
 algos = [insertion_sort, shell_sort, \
          td_sort, bu_sort, \
-         quick_sort, quick_sort_avg2, quick_sort_3way]
+         quick_sort, quick_sort_avg2]
 
 
 class TestSortingAlgorithms(unittest.TestCase):
+
+    """
+    Basic testing functions written in a very modular way to allow
+    flexibility and future changes
+    """
 
     def setUp(self):
         self.targets_no_dups = [[i for i in range(n)]
@@ -29,10 +33,7 @@ class TestSortingAlgorithms(unittest.TestCase):
                  sample += [j for _ in range(j)]
             self.targets_yes_dups.append(sample)
 
-    """
-    Basic testing functions written in a very modular way to allow
-    flexibility and future changes
-    """
+
     def pair(self, target, algo):
         test = target[:]
         random.shuffle(test)
@@ -82,8 +83,7 @@ class TestSortingAlgorithms(unittest.TestCase):
         self.run_sample_cases(quick_sort_avg2)
 
 
-    def test_quick_sort_3way(self):
-        self.run_sample_cases(quick_sort_3way)
+# need a new testcase for sorts using Comparables
 
 
 if __name__ == '__main__':

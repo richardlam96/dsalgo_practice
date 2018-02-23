@@ -28,6 +28,19 @@ def insertion_sort(target):
 
 
 def insertion_sort_by_index(target, lo, hi):
+    """
+    Insertion sort that references by key, only sorting subarrays.
+
+    This is mainly used for optimization of other sorts when those sorts
+    reach a subarray size of 15 or less. It really can be turned into the
+    main insertion sort with some default arguments.
+
+    input: target array to sort
+           lo - index to start sorting
+           hi - index to end sorting
+
+    output: no return. sorts array
+    """
     for i in range(lo+1, hi+1):
         pivot = target[i]
         j = i
@@ -260,12 +273,13 @@ def partition_3way(target, lo, hi):
             insertion_sort_by_index(target, lo-1, hi)
         return
 
-    if hi-lo+1 <= 15:
+    # changed this to 3 for testing
+    if hi-lo+1 <= 3:
         insertion_sort_by_index(target, lo, hi)
         return
 
     pivot = target[lo]
-    p = lo + 1          # forward moving indicies
+    p = lo + 1         # forward moving indicies
     i = p + 1           # p stays in switch pos, i moves
     q = hi              # backward moving indicies
     j = q - 1           # vice versa
@@ -277,6 +291,7 @@ def partition_3way(target, lo, hi):
             if target[i] == pivot:
                 exchange(target, p, i)
                 p += 1
+                i += 1
             if target[i] < pivot:
                 i += 1
             elif target[i] > pivot:
@@ -285,6 +300,7 @@ def partition_3way(target, lo, hi):
             if target[j] == pivot:
                 exchange(target, q, j)
                 q -= 1
+                j -= 1
             if target[j] > pivot:
                 j -= 1
             elif target[j] < pivot:
@@ -299,7 +315,7 @@ def partition_3way(target, lo, hi):
         print(target)
 
     print("rearrange")
-    print(target)
+    print(target[p:j+1], target[i:q+1])
     # switch values so that values equal to pivot are in the middle
     # first, from first index to j (last value smaller than pivot)
     k = lo
