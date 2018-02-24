@@ -12,7 +12,8 @@ def main():
     # (except for python's sorted function)
     # NOTE: later use test functions to sort against sorted instead
 
-    test = [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,6,6,6,6,6,6,66]
+    # test = [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,6,6,6,6,6,6,66]
+    test = [i for i in range(20)]
     print("ORIG:", test)
     print("ORIG:", sorted(test))
 
@@ -20,7 +21,7 @@ def main():
         target = test[:]
         print("\n{}: ".format(algo.__name__))
         random.shuffle(target)
-        print(target)
+        print("ORIG:", target)
         algo(target)
         print("{}: {}".format("GOOD" if target == sorted(test) else "BAD ",
                              target))

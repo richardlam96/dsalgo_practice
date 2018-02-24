@@ -36,11 +36,18 @@ def insertion_sort_by_index(target, lo, hi):
     reach a subarray size of 15 or less. It really can be turned into the
     main insertion sort with some default arguments.
 
-    input: target array to sort
-           lo - index to start sorting
-           hi - index to end sorting
+    Parameters:
+    arg1: []     
+        target array to sort
+    arg2: int
+        beginning index
+    arg3: int
+        ending index
 
-    output: no return. sorts array
+    Return:
+    no return 
+        sorts array
+    
     """
     for i in range(lo+1, hi+1):
         pivot = target[i]
@@ -168,10 +175,6 @@ def bu_sort(target):
 # so all values equal to pivot are between those less than and greater than
 # and then recursively sorts the less than and greater than partititons.
 # In other words, this implementation is entropy optimal.
-#
-# NOTE: These implementations have not been checked with the book but they
-# are still pretty fast. As of now, quick_sort_avg2 has about the same
-# performance in a random case as quick_sort_3way.
 #
 # NOTE: In the first implementation of the partition function, the values
 # that are equal to the pivot need to be on the right becuase that
@@ -351,26 +354,46 @@ def swim(target):
     for i in reversed(range(len(target))):
         if (i // 2) >= 0:
             if target[i] > target[i // 2]:
-                temp = target[i]
-                target[i] = target[i // 2]
-                target[i // 2] = temp
+                exchange(target, i, i // 2)
 
 
-def sink(target):
-    for i in range(len(target)):
+# def sink(target):
+#     for i in range(len(target)):
+#         if (2*i) < len(target) and target[i] < target[2*i]:
+#             exchange(target, i, 2*i)
+#         if (2*i + 1) < len(target) and target[i] < target[2*i + 1]:
+#             exchange(target, i, 2*i+1)
+
+
+def sink(target, lo, hi):
+    for i in range(lo, hi):
         if (2*i) < len(target) and target[i] < target[2*i]:
-            temp = target[i]
-            target[i] = target[2*i]
-            target[2*i] = temp
+            exchange(target, i, 2*i)
         if (2*i + 1) < len(target) and target[i] < target[2*i + 1]:
-            temp = target[i]
-            target[i] = target[2*i + 1]
-            target[2*i + 1] = temp
+            exchange(target, i, 2*i+1)
+
+def print_tree(target):
+    i = 0
+    while (2*i+1) < len(target):
+        print(target[i])
+        print("l", target[2*i], "r", target[2*i+1])
+        i += 1
 
 
 def swim_sink_sort(target):
-    swim(target)
-    sink(target)
+    # heap construction
+    N = len(target)
+    for i in reversed(range(N//2)):
+        sink(target, i, N)
+    
+    print_tree(target)
+    print("mid", target)
+    
+    # break and resort
+    while N > 1:
+        exchange(target, 0, N-1)
+        sink(target, 0, N-1)
+        N -= 1
 
 def heap_sort(target):
     pass
