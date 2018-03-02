@@ -6,7 +6,7 @@ import time
 from numpy import random
 # from functools import partial
 
-from tools.sorts import shell_sort, quick_sort 
+from tools.sorts import shell_sort, quick_sort, heap_sort 
 
 
 # NOTE: Need to rewrite this file to do what it actually was meant to do,
@@ -34,7 +34,7 @@ def get_runtime(data, sorter):
 
 
 def main():
-    algos = [sorted, shell_sort, quick_sort]
+    algos = [sorted, shell_sort, quick_sort, heap_sort]
     # runtimes = []
     # larger samples to compare time
     doublingN = [500*2**n for n in range(0, 4)]

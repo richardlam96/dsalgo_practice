@@ -20,7 +20,7 @@ def main():
     # print(testing_input[0].less_than(testing_input[1]), "False")
 
     print("Quick Sort Comparable Test")
-    quick_sort_comparable(testing_input, "date")
+    quick_sort_comparable(testing_input)
     for obj in testing_input:
         obj.print_info()
 

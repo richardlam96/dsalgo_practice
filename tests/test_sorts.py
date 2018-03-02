@@ -7,12 +7,14 @@ from numpy import random
 
 from sorts import insertion_sort, shell_sort, \
                  td_sort, bu_sort, \
-                 quick_sort, quick_sort_avg2, quick_sort_3way
+                 quick_sort, quick_sort_3way, \
+                 heap_sort
 
 
 algos = [insertion_sort, shell_sort, \
          td_sort, bu_sort, \
-         quick_sort, quick_sort_avg2]
+         quick_sort, \
+         heap_sort]
 
 
 class TestSortingAlgorithms(unittest.TestCase):
@@ -81,6 +83,10 @@ class TestSortingAlgorithms(unittest.TestCase):
 
     def test_quick_sort_avg2(self):
         self.run_sample_cases(quick_sort_avg2)
+
+    def test_heap_sort(self):
+        self.run_sample_cases(heap_sort)
+
 
 
 # need a new testcase for sorts using Comparables

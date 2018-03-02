@@ -36,6 +36,7 @@ class HeapPQ(object):
                     self.pq[i] = temp
 
 
+    # this may need updating. refer to heapsort.
     def __sink(self):
         for i in range(self.qsize):
             if (2*i + 1) < self.qsize:

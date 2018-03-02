@@ -75,7 +75,7 @@ def partition(target, lo, hi, key):
     partition(target, j + 1, hi, key)
 
 
-def quick_sort_comparable(target, key=""):
+def quick_sort_comparable(target, key=None):
     """
     Quick sort that uses the same algorithm as the basic quick sort but uses
     the Comparable class to allow sorting things by key.
@@ -85,10 +85,6 @@ def quick_sort_comparable(target, key=""):
 
     output: none
     """
-    # tmp fix for clients using default
-    if not key:
-        key = target[0].default_cmp_key
-
     random.shuffle(target)
     partition(target, 0, len(target)-1, key)
 

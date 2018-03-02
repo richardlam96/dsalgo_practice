@@ -3,11 +3,11 @@ import os.path
 sys.path.append(os.path.join(os.path.dirname(__file__), "../tools"))
 
 from numpy import random
-from sorts import swim_sink_sort
+from sorts import heap_sort
 
 
 def main():
-    algos = [swim_sink_sort]
+    algos = [heap_sort]
     # smaller sample to check validity
     # (except for python's sorted function)
     # NOTE: later use test functions to sort against sorted instead

@@ -194,6 +194,15 @@ def bu_sort(target):
 # implementation of partition as well. Perhaps this comes to show that this
 # method of partitioning is not the best?
 #
+
+def med_partition_scheme(target, lo, hi):
+    mid = hi-lo+1 // 2
+    if target[mid] < target[lo]:
+        exchange(target, lo, mid)
+    if target[mid] > target[hi]:
+        exchange(target, mid, hi)
+    return target[mid]
+
 def partition(target, lo, hi):
 
     if lo == hi:
@@ -207,6 +216,9 @@ def partition(target, lo, hi):
         insertion_sort_by_index(target, lo, hi)
         return
 
+    # if hi-lo+1 > 15:
+    #     pivot = med_partition_scheme(target, lo, hi)
+    # else:
     pivot = target[lo]
     i = lo
     j = hi
@@ -227,44 +239,6 @@ def partition(target, lo, hi):
 def quick_sort(target):
     random.shuffle(target)
     partition(target, 0, len(target)-1)
-
-
-
-def partition_avg2(target, lo, hi):
-
-    if lo == hi:
-        if lo == 0:
-            insertion_sort_by_index(target, lo, hi+1)
-        else:
-            insertion_sort_by_index(target, lo-1, hi)
-        return
-
-    if hi-lo+1 <= 15:
-        insertion_sort_by_index(target, lo, hi)
-        return
-
-    pivot = (target[lo] + target[hi]) / 2
-    i = lo
-    j = hi
-    while i < j:
-        while i < j and target[i] < pivot:
-            i += 1
-        while j > i and target[j] >= pivot:
-            j -= 1
-        if j <= i:
-            break
-
-        temp = target[i]
-        target[i] = target[j]
-        target[j] = temp
-
-    partition_avg2(target, 0, j-1)
-    partition_avg2(target, j, hi)
-
-
-def quick_sort_avg2(target):
-    random.shuffle(target)
-    partition_avg2(target, 0, len(target)-1)
 
 
 
@@ -347,53 +321,62 @@ def quick_sort_3way(target):
 
 # HEAPSORT ###################################################################
 # Heap sort uses the sink function from HeapPQ and IndexPQ to sort an array
-# in two phases: the heap construction and the sortdown
+# in two phases: the heap construction and the sortdown.
+# 
+# During the heap construction, the algorithm uses the sink function, which
+# here has been modified to sort in a range noted by beg and end indicies. 
+# Then, during the sortdown, the largest value, which is always the root of 
+# the tree (or first in the array), is exchanged for the element at the end
+# of the array where it stays. This is repeated until all elements are sorted.
+#
+# Ideally, Heapsort is the competitor of Quicksort. Heapsort is used when 
+# Quicksort hits its worst case.
+#
+# NOTE: sort_perf is still showing that this heap sort is twice as slow as
+# the quick sort
 #
 
-def swim(target):
-    for i in reversed(range(len(target))):
-        if (i // 2) >= 0:
-            if target[i] > target[i // 2]:
-                exchange(target, i, i // 2)
-
-
-# def sink(target):
-#     for i in range(len(target)):
-#         if (2*i) < len(target) and target[i] < target[2*i]:
-#             exchange(target, i, 2*i)
-#         if (2*i + 1) < len(target) and target[i] < target[2*i + 1]:
-#             exchange(target, i, 2*i+1)
-
-
 def sink(target, lo, hi):
-    for i in range(lo, hi):
-        if (2*i) < len(target) and target[i] < target[2*i]:
-            exchange(target, i, 2*i)
-        if (2*i + 1) < len(target) and target[i] < target[2*i + 1]:
-            exchange(target, i, 2*i+1)
+    """Reheapify the target"""
+    if hi - lo < 1:
+        return
+    i = lo
+    while 2*i <= hi:
+        j = 2*i
+
+        # only one child
+        if j == hi:
+            pass
+        else:
+            # find bigger of children
+            if target[j] > target[j+1]:
+                pass
+            else:
+                j += 1
+
+        if target[i] < target[j]:
+            exchange(target, i, j)
+        else:
+            break
+
+        i = j
+
 
 def print_tree(target):
-    i = 0
-    while (2*i+1) < len(target):
+    for i in range(1, len(target) // 2):
         print(target[i])
-        print("l", target[2*i], "r", target[2*i+1])
-        i += 1
+        print("l:", target[2*i], "r:", target[2*i+1])
 
-
-def swim_sink_sort(target):
-    # heap construction
-    N = len(target)
-    for i in reversed(range(N//2)):
-        sink(target, i, N)
-    
-    print_tree(target)
-    print("mid", target)
-    
-    # break and resort
-    while N > 1:
-        exchange(target, 0, N-1)
-        sink(target, 0, N-1)
-        N -= 1
 
 def heap_sort(target):
-    pass
+    """Heap construction and sortdown."""
+    target.insert(0, None)
+    N = len(target)
+    for i in reversed(range(1, N//2)):
+        sink(target, i, N-1)
+    
+    for n in reversed(range(1, N)):
+        sink(target, 1, n)
+        exchange(target, 1, n)
+
+    target.pop(0)
