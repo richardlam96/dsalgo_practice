@@ -6,7 +6,7 @@ import time
 from numpy import random
 # from functools import partial
 
-from tools.sorts import shell_sort, quick_sort, heap_sort 
+from tools.sorts import shell_sort, quick_sort, heap_sort
 
 
 # NOTE: Need to rewrite this file to do what it actually was meant to do,
@@ -48,9 +48,9 @@ def main():
                 runtime = get_runtime(target, algo) * 1000
                 print("{:.5f}".format(runtime),
                         end=" ")
-                # runtimes.append(runtime) 
+                # runtimes.append(runtime)
         print("\n")
-#
+
 #    # need to decide what and how data should be displayed
 #    # maybe find average of values greater than zero and scatter or bar
 #    # or learn histograms
