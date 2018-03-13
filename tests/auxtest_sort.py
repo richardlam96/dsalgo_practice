@@ -12,15 +12,17 @@ def main():
     # (except for python's sorted function)
     # NOTE: later use test functions to sort against sorted instead
 
-    # test = [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,6,6,6,6,6,6,66]
-    test = [i for i in range(20)]
+    # test = [8,7,3,6,5,1,2,4,0,9]
+    test = [1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,6,6,6,6,6,6,66]
+    test.reverse()
+    # test = [i for i in range(20)]
     print("ORIG:", test)
     print("ORIG:", sorted(test))
 
     for algo in algos:
         target = test[:]
         print("\n{}: ".format(algo.__name__))
-        random.shuffle(target)
+        # random.shuffle(target)
         print("ORIG:", target)
         algo(target)
         print("{}: {}".format("GOOD" if target == sorted(test) else "BAD ",

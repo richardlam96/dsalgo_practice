@@ -3,7 +3,12 @@ class Comparable(object):
 
     def __init__(self, value=0):
         self.value = value
-        self.default_cmp_key = "value"
+        # possible to set this only in the constructor and not as a parameter
+        # in every function. but every object would need to be created with it
+        # as a parameter. to avoid this might mean using a separate client. 
+        # though having a key for each object means you can compare different
+        # objects with different attributes.
+        self.default_cmp_key = "value"   
 
     def less_than(self, other, key=None):
         if not key:

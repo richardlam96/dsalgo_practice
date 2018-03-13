@@ -340,43 +340,44 @@ def sink(target, lo, hi):
     """Reheapify the target"""
     if hi - lo < 1:
         return
+    
+    if hi - lo == 1:
+        if target[lo] < target[hi]:
+            exchange(target, lo, hi)
+        return
+
     i = lo
     while 2*i <= hi:
         j = 2*i
 
-        # only one child
-        if j == hi:
-            pass
-        else:
-            # find bigger of children
-            if target[j] > target[j+1]:
-                pass
-            else:
-                j += 1
-
+        # find bigger of children
+        if j+1 <= hi and target[j] < target[j+1]:
+            j += 1
         if target[i] < target[j]:
             exchange(target, i, j)
-        else:
-            break
+        # else:
+        #     break
 
         i = j
 
 
 def print_tree(target):
+    print("mid", len(target) // 2)
     for i in range(1, len(target) // 2):
+        print("indicies", i, 2*1, 2*i + 1)
         print(target[i])
         print("l:", target[2*i], "r:", target[2*i+1])
 
 
 def heap_sort(target):
-    """Heap construction and sortdown."""
+    """Sorting using heap construction and sortdown."""
+    # breaks when largest is last
     target.insert(0, None)
     N = len(target)
-    for i in reversed(range(1, N//2)):
+    for i in reversed(range(1, N//2 + 1)):
         sink(target, i, N-1)
-    
+
     for n in reversed(range(1, N)):
         sink(target, 1, n)
         exchange(target, 1, n)
-
     target.pop(0)

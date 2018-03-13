@@ -46,13 +46,13 @@ class TestSortingAlgorithms(unittest.TestCase):
     def no_dups_sample(self, algo):
         for target in self.targets_no_dups:
             test = self.pair(target, algo)
-            self.assertEqual(test, target)
+            self.assertEqual(target, test)
 
 
     def yes_dups_sample(self, algo):
         for target in self.targets_yes_dups:
             test = self.pair(target, algo)
-            self.assertEqual(test, target)
+            self.assertEqual(target, test)
 
 
     def run_sample_cases(self, algo):
@@ -81,8 +81,8 @@ class TestSortingAlgorithms(unittest.TestCase):
         self.run_sample_cases(quick_sort)
 
 
-    def test_quick_sort_avg2(self):
-        self.run_sample_cases(quick_sort_avg2)
+    # def test_quick_sort_avg2(self):
+    #     self.run_sample_cases(quick_sort_avg2)
 
     def test_heap_sort(self):
         self.run_sample_cases(heap_sort)
