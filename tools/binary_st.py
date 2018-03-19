@@ -106,10 +106,10 @@ class BinaryST(object):
 
 
     def recur_delete_min(self, node):
-        if node.left:
-            node.left = self.recur_delete_min(node.left)
-        else: 
+        
+        if not node.left:
             return node.right
+        node.left = self.recur_delete_min(node.left)
         return node
 
 
@@ -136,7 +136,8 @@ class BinaryST(object):
         if self.root == None:
             return None
         self.root = self.recur_delete(self.root, key)
-    
+   
+
     def recur_delete(self, node, key):
             
         traveling = node
@@ -146,10 +147,16 @@ class BinaryST(object):
             traveling.right = self.recur_delete(traveling.right, key)
         else:
             if traveling.left and traveling.right:
+                replacement = Node()
                 successor = self.min(traveling.right)
-                successor.left = traveling.left
-                successor.right = self.recur_delete_min(traveling.right)
-                return successor
+                
+                replacement.key = successor.key
+                replacement.value = successor.value
+                replacement.left = traveling.left
+                replacement.right = self.recur_delete_min(traveling.right)
+                
+                successor = None
+                return replacement
             else: 
                 if traveling.left:
                     return traveling.left
@@ -159,27 +166,8 @@ class BinaryST(object):
                     return None
         return node
 
-        # switch key and value for simplicity
-        # then delete the min(traveling.right)
-        # if traveling:
-        #     # no children, aka leaf, delete leaf
-        #     if not (traveling.left and traveling.right):
-        #         traveling = None
-        #         return
 
-        #     successor = self.min(traveling.right)
-        #     # if no right child
-        #     if not successor:
-        #         traveling = traveling.left
-
-        #     # else copy values
-        #     else:
-        #         traveling.key = successor.key
-        #         traveling.value = successor.value
-            
-    
-
-    def print(self):
+    def print_tree(self):
         if self.root == None:
             print("Empty tree.")
 
@@ -188,7 +176,7 @@ class BinaryST(object):
 
     def recur_print(self, node):
         if node == None:
-            return ""
+            return 
    
         if node.left:
             self.recur_print(node.left)

@@ -19,7 +19,7 @@ def main():
 
     # show the tree
     print("The tree:")
-    sample_bst.print()
+    sample_bst.print_tree()
 
     
     # check the size (which should be 5)
@@ -39,9 +39,9 @@ def main():
 
     # delete a value and check tree
     print("Delete min:")
-    sample_bst.delete("B")   # B and D don't work.
+    sample_bst.delete("D")   # B and D don't work.
     print("The tree:")
-    sample_bst.print()
+    sample_bst.print_tree()
 
 
 if __name__ == '__main__':
