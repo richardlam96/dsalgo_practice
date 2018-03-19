@@ -39,7 +39,7 @@ def main():
 
     # delete a value and check tree
     print("Delete min:")
-    sample_bst.delete(sample_bst.min().key)
+    sample_bst.delete("B")   # B and D don't work.
     print("The tree:")
     sample_bst.print()
 

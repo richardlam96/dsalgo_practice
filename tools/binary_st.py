@@ -98,7 +98,21 @@ class BinaryST(object):
         
         return traveling
 
-    
+
+    def delete_min(self):
+        if self.root == None:
+            print("Empty tree!")
+        self.root = self.recur_delete_min(self.root)
+
+
+    def recur_delete_min(self, node):
+        if node.left:
+            node.left = self.recur_delete_min(node.left)
+        else: 
+            return node.right
+        return node
+
+
     def max(self, key=None):
         if self.root == None:
             return None
@@ -119,60 +133,55 @@ class BinaryST(object):
 
 
     def delete(self, key):
-        # Problem here is setting variables to None does not delete the actual
-        # node, it just deletes the variable that is referencing it. Seems like
-        # one would need to catch the parent node to the node to be deleted
-        # because garbage collection will activate when nothing is pointing to
-        # that node.
-
         if self.root == None:
             return None
-
-        traveling = self.root
-        # Basic solution:
-        # check if traveling is equal
-        # else check if less or greater
-        # then check if travel is equal to corres.
-        # if any matches, break
-        # else, move to corres. direction
-        # 
-        # if key is found
-        # if no children, delete reference to it
-        # find successor
-        # 
-        while traveling:
-            if key < traveling.key:
-                traveling = traveling.left
-            elif key > traveling.key:
-                traveling = traveling.right
-            else:
-                break
+        self.root = self.recur_delete(self.root, key)
+    
+    def recur_delete(self, node, key):
+            
+        traveling = node
+        if key < traveling.key:
+            traveling.left = self.recur_delete(traveling.left, key)
+        elif key > traveling.key:
+            traveling.right = self.recur_delete(traveling.right, key)
+        else:
+            if traveling.left and traveling.right:
+                successor = self.min(traveling.right)
+                successor.left = traveling.left
+                successor.right = self.recur_delete_min(traveling.right)
+                return successor
+            else: 
+                if traveling.left:
+                    return traveling.left
+                elif traveling.right:
+                    return traveling.right
+                else:
+                    return None
+        return node
 
         # switch key and value for simplicity
         # then delete the min(traveling.right)
-        if traveling:
-            # no children, aka leaf
-            if not (traveling.left and traveling.right):
-                traveling = None
-                return
+        # if traveling:
+        #     # no children, aka leaf, delete leaf
+        #     if not (traveling.left and traveling.right):
+        #         traveling = None
+        #         return
 
-            successor = self.min(traveling.right)
-            # if no right child
-            if not successor:
-                traveling = traveling.left
+        #     successor = self.min(traveling.right)
+        #     # if no right child
+        #     if not successor:
+        #         traveling = traveling.left
 
-            # else copy values
-            else:
-                traveling.key = successor.key
-                traveling.value = successor.value
+        #     # else copy values
+        #     else:
+        #         traveling.key = successor.key
+        #         traveling.value = successor.value
             
-                successor = None
-        return
-
+    
 
     def print(self):
         if self.root == None:
-            return ""
+            print("Empty tree.")
 
         self.recur_print(self.root)
 
