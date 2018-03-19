@@ -11,7 +11,9 @@
 #
 # First, do it recursively, for the recursion practice, then do it non-
 # recursively.
-#
+# Also, these recursive implementations are not exactly Pythonic. But this can
+# be changed later with default parameter values.
+# 
 
 class Node(object):
     """
@@ -23,7 +25,11 @@ class Node(object):
         self.left = None
         self.right = None
 
-        
+    def __repr__(self):
+        return_string = self.key + " " + str(self.value)
+        return return_string
+
+
 
 class BinaryST(object):
     """
@@ -53,7 +59,6 @@ class BinaryST(object):
             return 0
         left_size = self.recur_size(target_node.left)
         right_size = self.recur_size(target_node.right)
-     
         return 1 + left_size + right_size
     
 
@@ -81,32 +86,39 @@ class BinaryST(object):
             node.right = self.recur_put(node.right, key, value)
         else:
             node.value = value
-       
         return node
 
 
-    def min(self, key=None):
+    def min(self, node=None):
+        """
+        Return the minimum value of a subtree rooted at the given node.
+        """
         if self.root == None:
             return None
         
-        if not key:
-            key = self.root
-
-        traveling = key
+        if not node:
+            node = self.root
+        
+        traveling = node
         while traveling.left:
             traveling = traveling.left
-        
         return traveling
 
 
     def delete_min(self):
+        """
+        Recursion starter for deleting the minimum value.
+        """
         if self.root == None:
             print("Empty tree!")
         self.root = self.recur_delete_min(self.root)
 
 
     def recur_delete_min(self, node):
-        
+        """
+        Directly recursive function to delete minimum value of a subtree 
+        rooted at given node.
+        """
         if not node.left:
             return node.right
         node.left = self.recur_delete_min(node.left)
@@ -114,6 +126,9 @@ class BinaryST(object):
 
 
     def max(self, key=None):
+        """
+        Return maximum value.
+        """
         if self.root == None:
             return None
 
@@ -128,18 +143,23 @@ class BinaryST(object):
         traveling = key
         while traveling.right:
             traveling = traveling.right
-
         return traveling
 
 
     def delete(self, key):
+        """
+        Recursion starter for deleted node with a given key.
+        """
         if self.root == None:
             return None
         self.root = self.recur_delete(self.root, key)
    
 
     def recur_delete(self, node, key):
-            
+        """
+        Directly recursive function to delete given key if found in subtree
+        rooted at the given node.
+        """
         traveling = node
         if key < traveling.key:
             traveling.left = self.recur_delete(traveling.left, key)
@@ -168,21 +188,54 @@ class BinaryST(object):
 
 
     def print_tree(self):
+        """
+        Recursion starter for printing entire tree.
+
+        This and the directly recursive function that it calls is similar to 
+        the implementation of the function that will return a list or sublist
+        of nodes between and including two given keys.
+        """
         if self.root == None:
             print("Empty tree.")
-
         self.recur_print(self.root)
 
 
     def recur_print(self, node):
+        """
+        Directly recursive function for printing each node of the tree.
+        """
         if node == None:
             return 
    
         if node.left:
             self.recur_print(node.left)
-        print(node.key, node.value)
+        print(node)
         if node.right:
             self.recur_print(node.right)
 
 
-    
+    def get_keys(self, lo, hi):
+        """
+        Returns a list of Nodes with key values between and including the
+        nodes with keys equal to the given lo and hi keys.
+        """
+        key_list = []
+        self.recur_get_keys(self.root, key_list, lo, hi)
+        return key_list
+
+    def recur_get_keys(self, node, key_list, lo, hi):
+        """
+        Directly recursive function for printing a list of keys.
+        """
+        if node == None:
+            return
+       
+        if node.key < lo:
+            self.recur_get_keys(node.right, key_list, lo, hi)
+        if node.key >= lo and node.key <= hi:
+            self.recur_get_keys(node.left, key_list, lo, hi)
+            key_list.append(node)
+            self.recur_get_keys(node.right, key_list, lo, hi)
+        if node.key > hi:
+            self.recur_get_keys(node.left, key_list, lo, hi)
+
