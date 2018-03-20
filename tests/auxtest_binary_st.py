@@ -37,13 +37,18 @@ def main():
     print("Max value:")
     print(sample_bst.max().key, sample_bst.max().value)
 
+    # delete middle values
+    sample_bst.delete("B")
+    sample_bst.delete("C")
+    sample_bst.delete("D")
     # get a list of keys
-    keylist = sample_bst.get_keys("A", "C")
+    
+    keylist = sample_bst.get_keys("A", "E")
     print(keylist)
 
     # delete a value and check tree
     print("Delete min:")
-    sample_bst.delete("D")   # B and D don't work.
+    sample_bst.delete(sample_bst.min().key)   
     print("The tree:")
     sample_bst.print_tree()
 

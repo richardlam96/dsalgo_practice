@@ -26,7 +26,13 @@ class Node(object):
         self.right = None
 
     def __repr__(self):
-        return_string = self.key + " " + str(self.value)
+        return "{}({}, {})".format(
+                self.__class__.__name__, 
+                self.key,
+                self.value)
+
+    def __str__(self):
+        return_string = str(self.key) # + " " + str(self.value)
         return return_string
 
 
@@ -152,7 +158,10 @@ class BinaryST(object):
         """
         if self.root == None:
             return None
-        self.root = self.recur_delete(self.root, key)
+        try:
+            self.root = self.recur_delete(self.root, key)
+        except AttributeError:
+            return None
    
 
     def recur_delete(self, node, key):
@@ -160,6 +169,7 @@ class BinaryST(object):
         Directly recursive function to delete given key if found in subtree
         rooted at the given node.
         """
+
         traveling = node
         if key < traveling.key:
             traveling.left = self.recur_delete(traveling.left, key)
@@ -234,7 +244,7 @@ class BinaryST(object):
             self.recur_get_keys(node.right, key_list, lo, hi)
         if node.key >= lo and node.key <= hi:
             self.recur_get_keys(node.left, key_list, lo, hi)
-            key_list.append(node)
+            key_list.append(node.key)
             self.recur_get_keys(node.right, key_list, lo, hi)
         if node.key > hi:
             self.recur_get_keys(node.left, key_list, lo, hi)
