@@ -3,11 +3,12 @@
 # uses a Node class to store two pointers: a left pointer to point to a
 # smaller key value, and a right pointer to point to a bigger key value than
 # the current Node's value.
-# Also, this implementation will not use rank() and select() methods.
+# Also, this implementation is an answer to question 3.2.12, so it will not
+# use rank(), select(), or a count field in Node.
 # 
 # The text uses recursive methods to keep things consistent, but a good
 # exercises is to implement them without recursion, which is how elementary
-# BST's are implemented, and without a counter for each Node.
+# BST's are implemented, and without a count field for each Node.
 #
 # First, do it recursively, for the recursion practice, then do it non-
 # recursively.
@@ -31,9 +32,9 @@ class Node(object):
                 self.key,
                 self.value)
 
-    def __str__(self):
-        return_string = str(self.key) # + " " + str(self.value)
-        return return_string
+    # def __str__(self):
+    #     return_string = str(self.key) # + " " + str(self.value)
+    #     return return_string
 
 
 
@@ -49,8 +50,10 @@ class BinaryST(object):
 
     def size(self):
         """
-        Recursion starter for finding tree size.
+        Recursion starter for finding tree size. 
         """
+        # NOTE: the challenge here was to not have a count field for each Node
+        # but a recursive function for size is also a slow one (linear).
         if self.root == None:
             return 0
         return self.recur_size(self.root)
@@ -181,10 +184,12 @@ class BinaryST(object):
                 successor = self.min(traveling.right)
                 
                 replacement.key = successor.key
+                # assigning val repetitive since del_min returns a node?
                 replacement.value = successor.value
                 replacement.left = traveling.left
                 replacement.right = self.recur_delete_min(traveling.right)
                 
+                # see above comment
                 successor = None
                 return replacement
             else: 
