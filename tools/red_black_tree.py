@@ -30,6 +30,12 @@ class RedBlackBST(object):
     def __init__(self):
         self.root = None
 
+    def size(self, node):
+        if not node:
+            return 0
+        else:
+            return node.N
+
     def is_red(self, node):
         if not node:
             return False
@@ -67,6 +73,7 @@ class RedBlackBST(object):
         else:
             node.value = value
 
+        
         if not self.is_red(node.left) and self.is_red(node.right):
             node = self.rotate_left(node)
         if self.is_red(node.left) and not self.is_red(node.left.left):
@@ -74,10 +81,8 @@ class RedBlackBST(object):
         if self.is_red(node.left) and self.is_red(node.right):
             self.flip_colors(node)
 
-        if node.left:
-            node.N += node.left.N
-        if node.right:
-            node.N += node.right.N
+        # do the rotations mess up the node count?
+        node.N = self.size(node.left) + self.size(node.right)
         return node
             
     def print_keys(self, node=None):
@@ -88,6 +93,31 @@ class RedBlackBST(object):
         print(node.key)
         if node.right:
             self.print_keys(node.right)
+   
+    def get_keys(self):
+        ret_list = []
+        self.recur_get_keys(self.root, ret_list)
+        return ret_list
+
+    def recur_get_keys(self, node, ret_list):
+        if node.left:
+            self.recur_get_keys(node.left, ret_list)
+        ret_list.append(node.key)
+        if node.right:
+            self.recur_get_keys(node.right, ret_list)
+
+    def alt_size(self):
+        ret = self.recur_size(self.root)
+        return ret
+
+    def recur_size(self, node):
+        if not node:
+            return 0
+        return self.recur_size(node.left) + self.recur_size(node.right) + 1
+
+
+
+
 
 
 
