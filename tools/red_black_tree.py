@@ -30,12 +30,6 @@ class RedBlackBST(object):
     def __init__(self):
         self.root = None
 
-    def size(self, node):
-        if not node:
-            return 0
-        else:
-            return node.N
-
     def is_red(self, node):
         if not node:
             return False
@@ -106,6 +100,12 @@ class RedBlackBST(object):
         if node.right:
             self.recur_get_keys(node.right, ret_list)
 
+    def size(self, node):
+        if not node:
+            return 0
+        else:
+            return node.N
+
     def alt_size(self):
         ret = self.recur_size(self.root)
         return ret
@@ -114,6 +114,52 @@ class RedBlackBST(object):
         if not node:
             return 0
         return self.recur_size(node.left) + self.recur_size(node.right) + 1
+
+    def delete(self, node):
+        pass
+
+    def delete_min(self, node):
+        # traverse down the left side of the tree
+        if node == root:
+            if self.is_2node(node.left) and self.is_2node(node.right):
+                self.flip_colors(node)
+                node.color = False
+            if self.is_2node(node.left) and not self.is_2node(node.right):
+
+
+    def is_2node(self, node):
+        return not self.is_red(node.left)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
