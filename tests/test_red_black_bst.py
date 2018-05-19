@@ -24,5 +24,13 @@ class RedBlackTreeSimpleTest(unittest.TestCase):
         result_size = self.bst.alt_size()
         self.assertEqual(correct_size, result_size)
 
+    def test_delete_min(self):
+        correct_array = sorted(self.letters)
+        correct_array.remove('a')
+        self.bst.delete_min(self.bst.root)
+        result_array = self.bst.get_keys()
+        self.assertEqual(correct_array, result_array)
+
+
 if __name__ == '__main__':
     unittest.main()

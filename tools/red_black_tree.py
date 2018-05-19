@@ -70,7 +70,7 @@ class RedBlackBST(object):
         
         if not self.is_red(node.left) and self.is_red(node.right):
             node = self.rotate_left(node)
-        if self.is_red(node.left) and not self.is_red(node.left.left):
+        if self.is_red(node.left) and self.is_red(node.left.left):
             node = self.rotate_right(node)
         if self.is_red(node.left) and self.is_red(node.right):
             self.flip_colors(node)
@@ -119,15 +119,49 @@ class RedBlackBST(object):
         pass
 
     def delete_min(self, node):
+        if not node.left.left:
+            ret = node.left
+            node.left = None
+            return ret
         # traverse down the left side of the tree
-        if node == root:
+        if node == self.root:
             if self.is_2node(node.left) and self.is_2node(node.right):
                 self.flip_colors(node)
                 node.color = False
             if self.is_2node(node.left) and not self.is_2node(node.right):
+                self.rotate_left(node)
+        else:
+            if not self.is_2node(node.left):
+                pass
+            else:
+                if not self.is_2node(node.right):
+                    node.right = self.rotate_right(node.right)
+                    node = self.rotate_left(node)
+                else: 
+                    self.flip_colors(node)
+        node = self.delete_min(node.left)
+        if self.is_red(node.left) and self.is_red(node.right):
+            self.flip_colors(node)
+        return node
 
+       # elif self.is_2node(node):
+        #     self.delete_min(node.left)
+
+        #     if self.is_2node(node.left) and not self.is_2node(node.left.left):
+        #         node.left.left.color = True
+        #         node.left.left.left = False
+
+        #     # this is a problem given the conditional:
+        #     # if the node is not a 2 node, there is nothing to do
+        #     # unless you save the condition for last?
+        #     if (not self.is_2node(node) and 
+        #        self.is_2node(node.left.left) and
+        #        self.is_2node(node.left.right)): 
+        #         self.flip_colors(node.left)
 
     def is_2node(self, node):
+        if not node or not node.left:
+            return False
         return not self.is_red(node.left)
 
 
