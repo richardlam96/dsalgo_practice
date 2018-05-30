@@ -115,31 +115,64 @@ class RedBlackBST(object):
             return 0
         return self.recur_size(node.left) + self.recur_size(node.right) + 1
 
-    def delete(self, node):
-        pass
-
-    def delete_min(self, node):
-        if not node.left.left:
-            ret = node.left
-            node.left = None
-            return ret
-        # traverse down the left side of the tree
-        if node == self.root:
-            if self.is_2node(node.left) and self.is_2node(node.right):
-                self.flip_colors(node)
-                node.color = False
-            if self.is_2node(node.left) and not self.is_2node(node.right):
-                self.rotate_left(node)
-        else:
-            if not self.is_2node(node.left):
-                pass
+    def delete(self, key):
+        # find node with given key
+        current_node = self.root
+        while key != current_node.key:
+            if key < current_node.key:
+                current_node = current_node.left
+            elif key > current_node.key:
+                current_node = current_node.right
+            elif key == current_node.key: 
+                break
             else:
-                if not self.is_2node(node.right):
-                    node.right = self.rotate_right(node.right)
-                    node = self.rotate_left(node)
-                else: 
+                return False
+
+        old_node = current_node
+        current_node = self.delete_min(current_node)
+        return old_node 
+
+    def delete_min(self, node=None):
+        if not node:
+            node = self.root
+        successor = self.recur_delete_min(node.right);
+        successor.left = node.left
+        successor.right = node.right
+        return successor
+
+    def recur_delete_min(self, node):
+        # what you're really doing is moving the node up
+        if not node.left:
+            return node
+
+        # traverse down the left side of the tree while reorganizing
+        if node.left and node.right:
+            if node == self.root:
+                if self.is_2node(node.left) and self.is_2node(node.right):
                     self.flip_colors(node)
-        node = self.delete_min(node.left)
+                    node.color = False
+                if self.is_2node(node.left) and not self.is_2node(node.right):
+                    self.rotate_left(node)
+            else:
+                if not self.is_2node(node.left):
+                    pass
+                else:
+                    if not self.is_2node(node.right):
+                        node.right = self.rotate_right(node.right)
+                        node = self.rotate_left(node)
+                    else: 
+                        self.flip_colors(node)
+        
+        # needs a check on left here?
+        successor = self.delete_min(node.left)
+        if not successor.left: 
+            #node.key = successor.key
+            #node.value = successor.value
+            if successor.right:
+                node.right = successor.right
+            return successor
+
+        # coming back up, turn 4-nodes back to 2-nodes
         if self.is_red(node.left) and self.is_red(node.right):
             self.flip_colors(node)
         return node

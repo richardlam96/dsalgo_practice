@@ -31,6 +31,19 @@ class RedBlackTreeSimpleTest(unittest.TestCase):
         result_array = self.bst.get_keys()
         self.assertEqual(correct_array, result_array)
 
+    def test_delete_min_value(self):
+        correct_value = 'a'
+        result_value = self.bst.delete_min().key
+        self.assertEqual(correct_value, result_value)
+
+    def test_delete_value_in_middle(self):
+        correct_array = sorted(self.letters)
+        correct_array.remove('r')
+        self.bst.delete('r')
+        result_array = self.bst.get_keys()
+        self.assertEqual(correct_array, result_array)
+        
+
 
 if __name__ == '__main__':
     unittest.main()
