@@ -138,7 +138,15 @@ class RedBlackBST(object):
     def delete_min(self, node=None):
         if not node:
             node = self.root
-            # need to handle all node == root cases here?
+        # need to handle all node == root cases here?
+        if node = self.root:
+            if node == self.root:
+                if self.is_2node(node.left) and self.is_2node(node.right):
+                    self.flip_colors(node)
+                    node.color = False
+                if self.is_2node(node.left) and not self.is_2node(node.right):
+                    self.rotate_left(node)
+
         # if it doesn't have a right, need to just return right as successor
         successor = self.recur_delete_min(node.right);
         successor.left = node.left
@@ -154,22 +162,16 @@ class RedBlackBST(object):
 
         # traverse down the left side of the tree while reorganizing
         if node.left and node.right:
-            if node == self.root:
-                if self.is_2node(node.left) and self.is_2node(node.right):
-                    self.flip_colors(node)
-                    node.color = False
-                if self.is_2node(node.left) and not self.is_2node(node.right):
-                    self.rotate_left(node)
+            if not self.is_2node(node.left):
+                pass
             else:
-                if not self.is_2node(node.left):
-                    pass
-                else:
-                    if not self.is_2node(node.right):
-                        node.right = self.rotate_right(node.right)
-                        node = self.rotate_left(node)
-                    else: 
-                        self.flip_colors(node)
-       
+                if not self.is_2node(node.right):
+                    node.right = self.rotate_right(node.right)
+                    node = self.rotate_left(node)
+                else: 
+                    self.flip_colors(node)
+        
+        node.left = self.recur_delete_min(node.left)
         # check if successor is the min
         # successor = self.delete_min(node.left)
         # if not successor.left: 
