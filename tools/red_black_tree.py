@@ -29,6 +29,9 @@ class Node(object):
 class RedBlackBST(object):
     def __init__(self):
         self.root = None
+        self.trash = None   # temp var to keep deleted successor
+                            # while del_min will just make sure tree is set
+                            # properly after removing successor
 
     def is_red(self, node):
         if not node:
@@ -135,6 +138,8 @@ class RedBlackBST(object):
     def delete_min(self, node=None):
         if not node:
             node = self.root
+            # need to handle all node == root cases here?
+        # if it doesn't have a right, need to just return right as successor
         successor = self.recur_delete_min(node.right);
         successor.left = node.left
         successor.right = node.right
@@ -143,6 +148,8 @@ class RedBlackBST(object):
     def recur_delete_min(self, node):
         # what you're really doing is moving the node up
         if not node.left:
+            if node.right:
+                return node.right
             return node
 
         # traverse down the left side of the tree while reorganizing
@@ -162,15 +169,13 @@ class RedBlackBST(object):
                         node = self.rotate_left(node)
                     else: 
                         self.flip_colors(node)
-        
-        # needs a check on left here?
-        successor = self.delete_min(node.left)
-        if not successor.left: 
-            #node.key = successor.key
-            #node.value = successor.value
-            if successor.right:
-                node.right = successor.right
-            return successor
+       
+        # check if successor is the min
+        # successor = self.delete_min(node.left)
+        # if not successor.left: 
+        #     if successor.right:
+        #         node.left = successor.right
+        #     return successor
 
         # coming back up, turn 4-nodes back to 2-nodes
         if self.is_red(node.left) and self.is_red(node.right):
