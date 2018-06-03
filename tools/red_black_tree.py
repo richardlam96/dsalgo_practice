@@ -131,9 +131,15 @@ class RedBlackBST(object):
             else:
                 return False
 
-        old_node = current_node
-        current_node = self.delete_min(current_node)
-        return old_node 
+        self.delete_min(current_node.right)
+        current_node.key = self.trash.key
+        current_node.value = self.trash.value
+        current_node.left = self.trash.left
+        current_node.right = self.trash.right
+        
+        #old_node = current_node
+        #current_node = self.delete_min(current_node)
+        #return old_node 
 
     def delete_min(self, node=None):
         if not node:

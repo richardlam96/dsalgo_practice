@@ -47,7 +47,7 @@ class RedBlackTreeSimpleTest(unittest.TestCase):
         result_array = self.bst.get_keys()
         self.assertEqual(correct_array, result_array)
 
-    def _test_delete_value_in_middle(self):
+    def test_delete_value_in_middle(self):
         correct_array = sorted(self.letters)
         correct_array.remove('r')
         self.bst.delete('r')
