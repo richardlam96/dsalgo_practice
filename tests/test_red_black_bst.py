@@ -10,12 +10,13 @@ class RedBlackTreeSimpleTest(unittest.TestCase):
     
     def setUp(self):
         self.letters = 'searchxmpl'
+        self.sorted_letters = sorted(self.letters);
         self.bst = RedBlackBST()
         for letter in self.letters:
             self.bst.put(letter, 1)
 
     def test_sorting(self):
-        correct_order = sorted(self.letters)
+        correct_order = self.sorted_letters
         result_order = self.bst.get_keys()
         self.assertEqual(correct_order, result_order)
 
@@ -25,18 +26,28 @@ class RedBlackTreeSimpleTest(unittest.TestCase):
         self.assertEqual(correct_size, result_size)
 
     def test_delete_min(self):
-        correct_array = sorted(self.letters)
+        correct_array = self.sorted_letters
         correct_array.remove('a')
-        self.bst.delete_min(self.bst.root)
+        self.bst.delete_min()
         result_array = self.bst.get_keys()
         self.assertEqual(correct_array, result_array)
 
     def test_delete_min_value(self):
         correct_value = 'a'
-        result_value = self.bst.delete_min().key
+        self.bst.delete_min()
+        result_value = self.bst.trash.key
         self.assertEqual(correct_value, result_value)
 
-    def test_delete_value_in_middle(self):
+    def test_delete_min_multiple_times(self):
+        for _ in range(2):
+            self.sorted_letters.pop(0)
+        correct_array = self.sorted_letters
+        self.bst.delete_min()
+        self.bst.delete_min()
+        result_array = self.bst.get_keys()
+        self.assertEqual(correct_array, result_array)
+
+    def _test_delete_value_in_middle(self):
         correct_array = sorted(self.letters)
         correct_array.remove('r')
         self.bst.delete('r')

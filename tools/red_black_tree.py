@@ -139,65 +139,65 @@ class RedBlackBST(object):
         if not node:
             node = self.root
         # need to handle all node == root cases here?
-        if node = self.root:
-            if node == self.root:
-                if self.is_2node(node.left) and self.is_2node(node.right):
-                    self.flip_colors(node)
-                    node.color = False
-                if self.is_2node(node.left) and not self.is_2node(node.right):
-                    self.rotate_left(node)
+        # if node == self.root:
+        #     if self.is_2node(node.left) and self.is_2node(node.right):
+        #         self.flip_colors(node)
+        #         node.color = False
+        #     if self.is_2node(node.left) and not self.is_2node(node.right):
+        #         node.right = self.rotate_right(node.right)
+        #         node = self.rotate_left(node)
+
 
         # if it doesn't have a right, need to just return right as successor
-        successor = self.recur_delete_min(node.right);
-        successor.left = node.left
-        successor.right = node.right
-        return successor
+        # successor = self.recur_delete_min(node.right);
+        # return successor
+        node = self.recur_delete_min(node);
 
     def recur_delete_min(self, node):
         # what you're really doing is moving the node up
+
+        # found the leftmost node of subtree
         if not node.left:
+            # probably don't even need to worry about this case
             if node.right:
                 return node.right
-            return node
+            self.trash = node
+            return None
 
-        # traverse down the left side of the tree while reorganizing
-        if node.left and node.right:
-            if not self.is_2node(node.left):
-                pass
-            else:
+        # if not node.left.left:
+        #     if node.left.right:
+        #         node.left = node.left.right
+        #     else:
+        #         node.left = None
+        #     return node
+
+
+        # PROTOTYPE for transforming
+        if self.is_2node(node.left):
+            if node.right:
                 if not self.is_2node(node.right):
                     node.right = self.rotate_right(node.right)
                     node = self.rotate_left(node)
-                else: 
+                    node.right = self.rotate_left(node.right)
+                    node.right.color = False
+                    node.left.left = True
+                else:
                     self.flip_colors(node)
-        
+
+        # PROTOTYPE
+        #if not self.is_2node(node.left):
+        #    pass
+        #if self.is_2node(node.left):
+        #    if not self.is_2node(node.right):
+        #        node = self.rotate_right(node)
+        #    if self.is_2node(node.right):
+        #        self.flip_colors
         node.left = self.recur_delete_min(node.left)
-        # check if successor is the min
-        # successor = self.delete_min(node.left)
-        # if not successor.left: 
-        #     if successor.right:
-        #         node.left = successor.right
-        #     return successor
 
         # coming back up, turn 4-nodes back to 2-nodes
         if self.is_red(node.left) and self.is_red(node.right):
             self.flip_colors(node)
         return node
-
-       # elif self.is_2node(node):
-        #     self.delete_min(node.left)
-
-        #     if self.is_2node(node.left) and not self.is_2node(node.left.left):
-        #         node.left.left.color = True
-        #         node.left.left.left = False
-
-        #     # this is a problem given the conditional:
-        #     # if the node is not a 2 node, there is nothing to do
-        #     # unless you save the condition for last?
-        #     if (not self.is_2node(node) and 
-        #        self.is_2node(node.left.left) and
-        #        self.is_2node(node.left.right)): 
-        #         self.flip_colors(node.left)
 
     def is_2node(self, node):
         if not node or not node.left:
