@@ -35,19 +35,23 @@ class RedBlackBST(object):
 
     def is_red(self, node):
         if not node:
-            return False
+            return False   # returning False for Falsiness may not be best
         return node.color
 
     def rotate_left(self, node):
         new_root = node.right
         node.right = new_root.left
         new_root.left = node
+        new_root.color = node.color
+        node.color = True
         return new_root
 
     def rotate_right(self, node):
         new_root = node.left
         node.left = new_root.right
         new_root.right = node
+        new_root.color = node.color
+        node.color = True
         return new_root
 
     def flip_colors(self, node):
@@ -215,6 +219,7 @@ class RedBlackBST(object):
         #self.recur_delete_min(node.left)
 
         # coming back up, turn 4-nodes back to 2-nodes
+        # also consider double red left link and red right link cases?
         if self.is_red(node.left) and self.is_red(node.right):
             self.flip_colors(node)
         elif not self.is_red(node.left) and self.is_red(node.right):

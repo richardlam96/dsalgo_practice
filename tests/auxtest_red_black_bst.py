@@ -10,7 +10,14 @@ def main():
     sample_bst = RedBlackBST()
     for letter in letters:
         sample_bst.put(letter, 1)
-    sample_bst.print_keys()
+    print('root', sample_bst.root.key)
+    print(sample_bst.get_keys())
+    
+    for letter in letters:
+        sample_bst.delete_min()
+        print('root', sample_bst.root.key)
+        print('deleted', sample_bst.trash.key)
+        print(sample_bst.get_keys())
 
 
 if __name__ == '__main__':
