@@ -44,6 +44,7 @@ class RedBlackBST(object):
         new_root.left = node
         new_root.color = node.color
         node.color = True
+        # doesn't get size attribute
         return new_root
 
     def rotate_right(self, node):
@@ -194,13 +195,20 @@ class RedBlackBST(object):
 
         # PROTOTYPE for transforming
         if self.is_2node(node.left):
+            # will there be a case where there won't be a right node?
             if node.right:
                 if not self.is_2node(node.right):
-                    node.right = self.rotate_right(node.right)
-                    node = self.rotate_left(node)
-                    node.right = self.rotate_left(node.right)
-                    node.right.color = False
-                    node.left.left = True
+                    if self.is_2node(node.right.left):
+                        # left child and sibling are 2 nodes
+                        node = self.rotate_left(node)
+                        self.flip_colors(node.left)
+                    else:
+                        # left child is 2-node, sibling is not
+                        node.right = self.rotate_right(node.right)
+                        node = self.rotate_left(node)
+                        node.right = self.rotate_left(node.right)
+                        node.right.color = False
+                        node.left.left = True
                 else:
                     self.flip_colors(node)
 
@@ -218,12 +226,23 @@ class RedBlackBST(object):
         node.left = self.recur_delete_min(node.left)
         #self.recur_delete_min(node.left)
 
+ 
         # coming back up, turn 4-nodes back to 2-nodes
-        # also consider double red left link and red right link cases?
+        # same conditions as putting
+        if not self.is_red(node.left) and self.is_red(node.right):
+            node = self.rotate_left(node)
+        if self.is_red(node.left) and self.is_red(node.left.left):
+            node = self.rotate_right(node)
         if self.is_red(node.left) and self.is_red(node.right):
             self.flip_colors(node)
-        elif not self.is_red(node.left) and self.is_red(node.right):
-            node = self.rotate_left(node)
+
+        # also consider double red left link and red right link cases?
+        # if self.is_red(node.left) and self.is_red(node.right):
+        #     self.flip_colors(node)
+        # elif not self.is_red(node.left) and self.is_red(node.right):
+        #     node = self.rotate_left(node)
+        # elif self.is_red(node.left) and self.is_red(node.left.left):
+        #     pass
         return node
 
     def is_2node(self, node):

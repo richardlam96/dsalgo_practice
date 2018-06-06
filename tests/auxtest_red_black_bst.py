@@ -16,8 +16,8 @@ def main():
     for letter in letters:
         sample_bst.delete_min()
         print('root', sample_bst.root.key)
-        print('deleted', sample_bst.trash.key)
         print(sample_bst.get_keys())
+        print()
 
 
 if __name__ == '__main__':
