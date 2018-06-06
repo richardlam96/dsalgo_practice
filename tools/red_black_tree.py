@@ -103,7 +103,7 @@ class RedBlackBST(object):
         if node.right:
             self.recur_get_keys(node.right, ret_list)
 
-    def size(self, node):
+    def size(self, node=None):
         if not node:
             return 0
         else:
@@ -128,7 +128,7 @@ class RedBlackBST(object):
                 current_node = current_node.right
             elif key == current_node.key: 
                 break
-            else:
+            if not current_node:
                 return False
 
         self.delete_min(current_node.right)
@@ -164,11 +164,21 @@ class RedBlackBST(object):
 
         # found the leftmost node of subtree
         if not node.left:
-            # probably don't even need to worry about this case
             if node.right:
                 return node.right
             self.trash = node
             return None
+        
+        # PROTOTYPE for returning successor
+        # still need to find a way to return successor that is connected to the
+        # root of the tree. Possible to connect at the initial call, then just
+        # return the node made during the initial call?
+        # if not node.left:
+        #     # probably don't even need to worry about this case
+        #     if node.right:
+        #         node = node.right
+        #     return None
+
 
         # if not node.left.left:
         #     if node.left.right:
@@ -198,11 +208,17 @@ class RedBlackBST(object):
         #        node = self.rotate_right(node)
         #    if self.is_2node(node.right):
         #        self.flip_colors
+
+        # don't return to left, just call the function and let the base case
+        # return the successor
         node.left = self.recur_delete_min(node.left)
+        #self.recur_delete_min(node.left)
 
         # coming back up, turn 4-nodes back to 2-nodes
         if self.is_red(node.left) and self.is_red(node.right):
             self.flip_colors(node)
+        elif not self.is_red(node.left) and self.is_red(node.right):
+            node = self.rotate_left(node)
         return node
 
     def is_2node(self, node):

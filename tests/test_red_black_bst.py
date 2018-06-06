@@ -46,6 +46,7 @@ class RedBlackTreeSimpleTest(unittest.TestCase):
         self.bst.delete_min()
         result_array = self.bst.get_keys()
         self.assertEqual(correct_array, result_array)
+        self.assertEqual(8, self.bst.alt_size())
 
     def test_delete_value_in_middle(self):
         correct_array = sorted(self.letters)
@@ -53,6 +54,33 @@ class RedBlackTreeSimpleTest(unittest.TestCase):
         self.bst.delete('r')
         result_array = self.bst.get_keys()
         self.assertEqual(correct_array, result_array)
+        self.assertEqual(9, self.bst.alt_size())
+
+    def test_delete_min_until_empty(self):
+        correct_array = self.sorted_letters
+        # for _ in range(len(self.letters)):
+        for _ in range(7):
+            correct_remove = correct_array.pop(0)
+            self.bst.delete_min()
+            print(self.bst.trash.key)
+            self.assertEqual(correct_array, self.bst.get_keys())
+            self.assertEqual(len(correct_array), self.bst.alt_size())
+
+    def failed_test_delete_mult_values(self):
+        letters_to_del = ['a','c','e']
+        correct_array = self.sorted_letters
+        for letter in letters_to_del:
+            self.bst.delete(letter)
+            correct_array.remove(letter)
+        self.assertEqual(correct_array, self.bst.get_keys())
+        self.assertEqual(len(correct_array), self.bst.alt_keys())
+
+    def failed_test_delete_rand_values(self):
+        letters_to_del = [1,3,5,6]
+        for letter in letters_to_del:
+            self.bst.delete(self.letters[letter])
+        self.assertEqual(len(self.letters) - len(letters_to_del), 
+                         self.bst.alt_size())
         
 
 
