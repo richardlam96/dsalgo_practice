@@ -15,6 +15,8 @@
 # The most notable functions will the inserts, rotations, and the color flip.
 #
 
+import pdb
+
 class Node(object):
     def __init__(self, key=None, value=None,
                  color=True):
@@ -56,9 +58,9 @@ class RedBlackBST(object):
         return new_root
 
     def flip_colors(self, node):
-        node.color = not node.color
-        node.left.color = not node.left.color
-        node.right.color = not node.right.color
+        node.color = True
+        node.left.color = False
+        node.right.color = False
 
     def put(self, key, value):
         self.root = self.recur_put(self.root, key, value)
@@ -90,6 +92,8 @@ class RedBlackBST(object):
     def print_keys(self, node=None):
         if not node: 
             node = self.root
+            if not self.root:
+                return
         if node.left:
             self.print_keys(node.left)
         print(node.key)
@@ -102,6 +106,8 @@ class RedBlackBST(object):
         return ret_list
 
     def recur_get_keys(self, node, ret_list):
+        if not node:
+            return
         if node.left:
             self.recur_get_keys(node.left, ret_list)
         ret_list.append(node.key)
@@ -146,7 +152,7 @@ class RedBlackBST(object):
         #current_node = self.delete_min(current_node)
         #return old_node 
 
-    def delete_min(self, node=None):
+    def old_delete_min(self, node=None):
         if not node:
             node = self.root
         # need to handle all node == root cases here?
@@ -164,7 +170,7 @@ class RedBlackBST(object):
         # return successor
         node = self.recur_delete_min(node);
 
-    def recur_delete_min(self, node):
+    def old_recur_delete_min(self, node):
         # what you're really doing is moving the node up
 
         # found the leftmost node of subtree
@@ -243,6 +249,40 @@ class RedBlackBST(object):
         #     node = self.rotate_left(node)
         # elif self.is_red(node.left) and self.is_red(node.left.left):
         #     pass
+        return node
+
+    def move_red_left(self, node):
+        self.flip_colors(node)
+        if self.is_red(node.right.left):
+            node.right = self.rotate_right(node.right)
+            node = self.rotate_left(node)
+        return node
+
+    def delete_min(self):
+        if not self.root:
+            return
+        if not self.is_red(self.root.left) and not self.is_red(self.root.right):
+            self.root.color = True
+        self.root = self.recur_delete_min(self.root)
+        if self.alt_size == 0:
+            node.color = False
+
+    def recur_delete_min(self, node):
+        if not node.left:
+            #pdb.set_trace()
+            return None
+        if not self.is_red(node.left) and not self.is_red(node.left.left):
+            node = self.move_red_left(node)
+        node.left = self.recur_delete_min(node.left)
+        return self.balance(node)
+
+    def balance(self, node):
+        if not self.is_red(node.left) and self.is_red(node.right):
+            node = self.rotate_left(node)
+        if self.is_red(node.left) and self.is_red(node.left.left):
+            node = self.rotate_right(node)
+        if self.is_red(node.left) and self.is_red(node.right):
+            self.flip_colors(node)
         return node
 
     def is_2node(self, node):
