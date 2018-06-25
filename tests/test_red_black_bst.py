@@ -39,14 +39,14 @@ class RedBlackTreeSimpleTest(unittest.TestCase):
         print(result_value)
         self.assertEqual(correct_value, result_value)
 
-    def _test_delete_min_multiple_times(self):
-        for _ in range(3):
+    def test_delete_min_multiple_times(self):
+        for _ in range(4):
             self.sorted_letters.pop(0)
             self.bst.delete_min()
         correct_array = self.sorted_letters
         result_array = self.bst.get_keys()
         self.assertEqual(correct_array, result_array)
-        self.assertEqual(7, self.bst.alt_size())
+        self.assertEqual(6, self.bst.alt_size())
 
     def failed_test_delete_value_in_middle(self):
         correct_array = sorted(self.letters)
@@ -56,10 +56,9 @@ class RedBlackTreeSimpleTest(unittest.TestCase):
         self.assertEqual(correct_array, result_array)
         self.assertEqual(9, self.bst.alt_size())
 
-    def _test_delete_min_until_empty(self):
+    def test_delete_min_until_empty(self):
         correct_array = self.sorted_letters
-        # for _ in range(len(self.letters)):
-        for _ in range(7):   # set at 7, where the error happens
+        for _ in range(len(correct_array)): 
             correct_remove = correct_array.pop(0)
             self.bst.delete_min()
             self.assertEqual(correct_array, self.bst.get_keys())

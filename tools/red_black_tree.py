@@ -58,9 +58,12 @@ class RedBlackBST(object):
         return new_root
 
     def flip_colors(self, node):
-        node.color = True
-        node.left.color = False
-        node.right.color = False
+        if node:
+            node.color = True
+        if node.left:
+            node.left.color = False
+        if node.right:
+            node.right.color = False
 
     def put(self, key, value):
         self.root = self.recur_put(self.root, key, value)
@@ -253,7 +256,7 @@ class RedBlackBST(object):
 
     def move_red_left(self, node):
         self.flip_colors(node)
-        if self.is_red(node.right.left):
+        if node.right and self.is_red(node.right.left):
             node.right = self.rotate_right(node.right)
             node = self.rotate_left(node)
         return node
@@ -277,12 +280,14 @@ class RedBlackBST(object):
         return self.balance(node)
 
     def balance(self, node):
-        if not self.is_red(node.left) and self.is_red(node.right):
+        # if not self.is_red(node.left) and self.is_red(node.right):
+        #     node = self.rotate_left(node)
+        # if self.is_red(node.left) and self.is_red(node.left.left):
+        #     node = self.rotate_right(node)
+        # if self.is_red(node.left) and self.is_red(node.right):
+        #     self.flip_colors(node)
+        if self.is_red(node.right):
             node = self.rotate_left(node)
-        if self.is_red(node.left) and self.is_red(node.left.left):
-            node = self.rotate_right(node)
-        if self.is_red(node.left) and self.is_red(node.right):
-            self.flip_colors(node)
         return node
 
     def is_2node(self, node):
